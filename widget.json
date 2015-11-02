@@ -1,0 +1,73 @@
+{
+   "name": "ax-details-layer-widget",
+   "description": "Displays a simple details layer, growing from a source element with animation.",
+
+   "integration": {
+      "technology": "angular",
+      "type": "widget"
+   },
+
+   "features": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+
+         "area": {
+            "type": "object",
+            "properties": {
+               "name": {
+                  "type": "string",
+                  "format": "topic",
+                  "default": "content",
+                  "description": "Name of the area to offer for contents."
+               }
+            }
+         },
+
+         "open": {
+            "type": "object",
+            "description": "Open the details layer upon action request.",
+            "properties": {
+               "onActions": {
+                  "type": "array",
+                  "description": "Names of the actions that trigger opening of the details layer.",
+                  "items": {
+                     "type": "string",
+                     "format": "topic"
+                  },
+                  "default": [ ]
+               }
+            }
+         },
+
+         "close": {
+            "type": "object",
+            "description": "Close the details layer upon action request.",
+            "properties": {
+               "onActions": {
+                  "type": "array",
+                  "description": "Names of the actions that trigger closing of the details layer.",
+                  "items": {
+                     "type": "string",
+                     "format": "topic"
+                  },
+                  "default": [ ]
+               }
+            }
+         },
+
+         "closeIcon": {
+            "type": "object",
+            "description": "Allow the user to close the details layer using an icon or the escape key.",
+            "properties": {
+               "enabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If true the popup is closed when escape key or the close icon is pressed."
+               }
+            }
+         }
+
+      }
+   }
+}

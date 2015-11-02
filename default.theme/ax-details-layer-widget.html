@@ -1,0 +1,20 @@
+<div class="modal-backdrop fade in" data-ng-show="model.isOpen"></div>
+
+<div class="abp-details-layer"
+     data-ax-details-layer-widget-layer
+     data-is-open="model.isOpen"
+     data-source-element-selector="model.sourceElementSelector"
+     data-area-name="model.widgetArea"
+     data-close-on-escape>
+   <button type="button"
+           class="abp-close-button fa fa-times"
+           data-ng-click="functions.close();"
+           data-ax-details-layer-widget-layer-close-button
+           data-ng-if="model.closeIconAvailable"
+         ></button>
+
+   <div class="abp-layer-content"
+        data-ax-widget-area
+        data-ax-widget-area-binding="features.area.name"></div>
+
+</div>
