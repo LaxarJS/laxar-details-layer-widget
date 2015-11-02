@@ -18,7 +18,7 @@ define( [
 
       $scope.model = {
          isOpen: false,
-         closeIconAvailable: true
+         sourceElementSelector: null
       };
 
       patterns.actions.handlerFor( $scope )
@@ -26,7 +26,11 @@ define( [
          .registerActionsFromFeature( 'close', handleCloseAction );
 
       $scope.functions = {
-         close: function() {
+         closeViaCloseIcon: function() {
+            if( !$scope.features.closeIcon.enabled ) {
+               return;
+            }
+
             $scope.model.isOpen = false;
          }
       };
@@ -53,11 +57,18 @@ define( [
       return {
          scope: {
             isOpen: '=',
-            areaName: '=',
-            sourceElementSelector: '='
+            sourceElementSelector: '=',
+            onClose: '='
          },
          link: function( scope, element ) {
+            var previousBodyOverflowValue;
             element.css( 'display', 'none' );
+
+            var escapeCloseHandler = function( event ) {
+               if( event.keyCode === 27 && typeof scope.onClose === 'function' ) {
+                  scope.$apply( scope.onClose );
+               }
+            };
 
             scope.$watch( 'isOpen', function( open ) {
                var sourceElement = null;
@@ -74,12 +85,15 @@ define( [
                element.removeClass( 'abp-with-source-animation' );
 
                if( open ) {
+                  previousBodyOverflowValue = document.body.style.overflow;
                   document.body.style.overflow = 'hidden';
                   openLayer( sourceElement );
+                  ng.element( document.body ).on( 'keyup', escapeCloseHandler );
                }
                else {
-                  delete document.body.style.overflow;
+                  document.body.style.overflow = previousBodyOverflowValue;
                   closeLayer( sourceElement );
+                  ng.element( document.body ).off( 'keyup', escapeCloseHandler );
                }
             } );
 
@@ -88,10 +102,12 @@ define( [
             function openLayer( sourceElement ) {
                var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
                if( sourceElement ) {
+
+                  var scaling = boundingBox.width / viewPortWidth();
+
                   element.css( 'top', boundingBox.top + 'px' );
                   element.css( 'left', boundingBox.left + 'px' );
-                  element.css( 'width', boundingBox.width + 'px' );
-                  element.css( 'height', boundingBox.height + 'px' );
+                  element.css( 'transform', 'scale( ' + scaling + ')' );
                   element.css( 'opacity', 0.3 );
 
                   element.addClass( 'abp-with-source-animation' );
@@ -105,8 +121,7 @@ define( [
                if( sourceElement ) {
                   element.css( 'top', '' );
                   element.css( 'left', '' );
-                  element.css( 'width', '' );
-                  element.css( 'height', '' );
+                  element.css( 'transform', 'scale(1)' );
                   element.css( 'opacity', 1 );
                }
             }
@@ -118,10 +133,10 @@ define( [
                if( sourceElement ) {
                   element.addClass( 'abp-with-source-animation' );
 
+                  var scaling = boundingBox.width / viewPortWidth();
                   element.css( 'top', boundingBox.top + 'px' );
                   element.css( 'left', boundingBox.left + 'px' );
-                  element.css( 'width', boundingBox.width + 'px' );
-                  element.css( 'height', boundingBox.height + 'px' );
+                  element.css( 'transform', 'scale( ' + scaling + ')' );
                   element.css( 'opacity', 0.3 );
 
                   element.one( 'transitionend', function() {
@@ -132,17 +147,12 @@ define( [
                   element.css( 'display', 'none' );
                }
             }
-         }
-      };
-   } ];
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   var closeButtonDirectiveName = 'axDetailsLayerWidgetLayerCloseButton';
-   var closeButtonDirective = [ function() {
-      return {
-         link: function( scope, element ) {
-
+            function viewPortWidth() {
+               return Math.max( document.documentElement.clientWidth, window.innerWidth || 0 );
+            }
          }
       };
    } ];
@@ -151,7 +161,6 @@ define( [
 
    return ng.module( 'axDetailsLayerWidget', [] )
       .controller( 'AxDetailsLayerWidgetController', Controller )
-      .directive( layerDirectiveName, layerDirective )
-      .directive( closeButtonDirectiveName, closeButtonDirective );
+      .directive( layerDirectiveName, layerDirective );
 
 } );

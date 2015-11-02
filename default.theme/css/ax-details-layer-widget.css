@@ -11,12 +11,15 @@
   height: 100vh;
   opacity: 1;
   background-color: white;
+  -webkit-transform-origin: top left;
+      -ms-transform-origin: top left;
+          transform-origin: top left;
 }
 .ax-details-layer-widget .abp-details-layer.abp-with-source-animation {
   -webkit-transition: all 350ms ease-out;
           transition: all 350ms ease-out;
-  -webkit-transition-property: top, left, width, height, opacity;
-          transition-property: top, left, width, height, opacity;
+  -webkit-transition-property: top, left, -webkit-transform, opacity;
+          transition-property: top, left, transform, opacity;
 }
 .ax-details-layer-widget .abp-close-button {
   position: absolute;
@@ -27,7 +30,8 @@
 .ax-details-layer-widget .abp-layer-content {
   position: relative;
   top: 80px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   height: -webkit-calc(100% - 80px);
   height: calc(100% - 80px);
   width: 100%;

@@ -17,12 +17,15 @@
       opacity: 1;
       background-color: white;
 
+      transform-origin: top left;
+
       &.abp-with-source-animation {
          transition: all 350ms ease-out;
-         transition-property: top, left, width, height, opacity;
+         transition-property: top, left, transform, opacity;
       }
    }
 
+   // NEEDS FIX A: positioning of the close button and the content needs to be overhauled
    .abp-close-button {
       position: absolute;
       top: 60px;
@@ -34,7 +37,8 @@
    .abp-layer-content {
       position: relative;
       top: 80px;
-      overflow: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
       height: calc(100% - 80px);
       width: 100%;
    }

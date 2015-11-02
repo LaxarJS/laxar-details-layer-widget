@@ -4,13 +4,12 @@
      data-ax-details-layer-widget-layer
      data-is-open="model.isOpen"
      data-source-element-selector="model.sourceElementSelector"
-     data-area-name="model.widgetArea"
-     data-close-on-escape>
+     data-on-close="functions.closeViaCloseIcon">
+
    <button type="button"
            class="abp-close-button fa fa-times"
-           data-ng-click="functions.close();"
-           data-ax-details-layer-widget-layer-close-button
-           data-ng-if="model.closeIconAvailable"
+           data-ng-click="functions.closeViaCloseIcon();"
+           data-ng-if="features.closeIcon.enabled"
          ></button>
 
    <div class="abp-layer-content"
