@@ -66,6 +66,23 @@
                   "description": "If true the popup is closed when escape key or the close icon is pressed."
                }
             }
+         },
+
+         "animateFrom": {
+            "type": "object",
+            "description": "Configuration for the animation source.",
+            "properties": {
+               "activeElement": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "If true the layer will grow from the current active element when the event is received."
+               },
+               "actionSelectorPath": {
+                  "type": "string",
+                  "default": null,
+                  "description": "JSON path to the action event property to interpret as css selector to animate from."
+               }
+            }
          }
 
       }

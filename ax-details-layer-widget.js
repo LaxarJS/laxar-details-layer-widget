@@ -58,6 +58,7 @@ define( [
          scope: {
             isOpen: '=',
             sourceElementSelector: '=',
+            useActiveElement: '=',
             onClose: '='
          },
          link: function( scope, element ) {
@@ -70,8 +71,12 @@ define( [
                }
             };
 
+            var sourceElement = null;
             scope.$watch( 'isOpen', function( open ) {
-               var sourceElement = null;
+               if( open && scope.useActiveElement ) {
+                  sourceElement = document.activeElement;
+               }
+               
                if( scope.sourceElementSelector ) {
                   sourceElement = document.querySelector( scope.sourceElementSelector );
 
