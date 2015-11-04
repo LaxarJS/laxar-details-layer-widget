@@ -35,7 +35,7 @@
                      "type": "string",
                      "format": "topic"
                   },
-                  "default": [ ]
+                  "default": []
                }
             }
          },
@@ -51,7 +51,7 @@
                      "type": "string",
                      "format": "topic"
                   },
-                  "default": [ ]
+                  "default": []
                }
             }
          },

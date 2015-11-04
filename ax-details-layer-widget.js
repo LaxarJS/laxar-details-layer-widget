@@ -32,13 +32,25 @@ define( [
             }
 
             $scope.model.isOpen = false;
+         },
+         whenVisibilityChanged: function( visible ) {
+            var areaName = $scope.features.area.name;
+            $scope.eventBus.publish( 'didChangeAreaVisibility.' + areaName + '.' + visible, {
+               area: areaName,
+               visible: visible
+            } );
          }
       };
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function handleOpenAction( event ) {
-         $scope.model.sourceElementSelector = event.sourceElementSelector || null;
+         $scope.model.sourceElementSelector = null;
+         if( $scope.features.animateFrom.actionSelectorPath ) {
+            $scope.model.sourceElementSelector =
+               ax.object.path( event, $scope.features.animateFrom.actionSelectorPath, null );
+         }
+
          $scope.model.isOpen = true;
       }
 
@@ -59,7 +71,8 @@ define( [
             isOpen: '=',
             sourceElementSelector: '=',
             useActiveElement: '=',
-            onClose: '='
+            onClose: '=',
+            whenVisibilityChanged: '='
          },
          link: function( scope, element ) {
             var previousBodyOverflowValue;
@@ -78,7 +91,7 @@ define( [
                }
                
                if( scope.sourceElementSelector ) {
-                  sourceElement = document.querySelector( scope.sourceElementSelector );
+                  sourceElement = document.querySelector( scope.sourceElementSelector ) || sourceElement;
 
                   if( !sourceElement ) {
                      ax.log.warn( 'Received source element selector [0], ' +
@@ -128,6 +141,13 @@ define( [
                   element.css( 'left', '' );
                   element.css( 'transform', 'scale(1)' );
                   element.css( 'opacity', 1 );
+
+                  element.one( 'transitionend', function() {
+                     scope.whenVisibilityChanged( true );
+                  } );
+               }
+               else {
+                  scope.whenVisibilityChanged( true );
                }
             }
 
@@ -146,10 +166,12 @@ define( [
 
                   element.one( 'transitionend', function() {
                      element.css( 'display', 'none' );
+                     scope.whenVisibilityChanged( false );
                   } );
                }
                else {
                   element.css( 'display', 'none' );
+                  scope.whenVisibilityChanged( false );
                }
             }
 
