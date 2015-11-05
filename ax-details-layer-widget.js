@@ -75,9 +75,10 @@ define( [
             whenVisibilityChanged: '='
          },
          link: function( scope, element ) {
-            var previousBodyOverflowValue;
+
             element.css( 'display', 'none' );
 
+            var scrollPrevention = createScrollPreventionHandler();
             var escapeCloseHandler = function( event ) {
                if( event.keyCode === 27 && typeof scope.onClose === 'function' ) {
                   scope.$apply( scope.onClose );
@@ -103,16 +104,22 @@ define( [
                element.removeClass( 'abp-with-source-animation' );
 
                if( open ) {
-                  previousBodyOverflowValue = document.body.style.overflow;
-                  document.body.style.overflow = 'hidden';
+                  scrollPrevention.on();
                   openLayer( sourceElement );
                   ng.element( document.body ).on( 'keyup', escapeCloseHandler );
                }
                else {
-                  document.body.style.overflow = previousBodyOverflowValue;
+                  scrollPrevention.off();
                   closeLayer( sourceElement );
                   ng.element( document.body ).off( 'keyup', escapeCloseHandler );
                }
+            } );
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            scope.$on( '$destroy', function() {
+               scrollPrevention.off();
+               sourceElement = null;
             } );
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,10 +182,41 @@ define( [
                }
             }
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function viewPortWidth() {
                return Math.max( document.documentElement.clientWidth, window.innerWidth || 0 );
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function createScrollPreventionHandler() {
+               var origWindowOnScroll;
+               var origWindowOnMouseWheel;
+
+               return {
+                  on: function() {
+                     origWindowOnScroll = window.onscroll;
+                     origWindowOnMouseWheel = window.onmousewheel;
+                     var doc = document;
+                     var pos = {
+                        x: Math.max( doc.documentElement.scrollLeft, doc.body.scrollLeft, window.pageXOffset ),
+                        y: Math.max( doc.documentElement.scrollTop, doc.body.scrollTop, window.pageYOffset )
+                     };
+                     window.onscroll = function() {
+                        window.scrollTo( pos.x, pos.y);
+                     };
+                     window.onmousewheel = function( e ) {
+                        e.preventDefault();
+                     };
+                  },
+                  off: function() {
+                     window.onscroll = origWindowOnScroll;
+                     origWindowOnScroll = null;
+                     window.onmousewheel = origWindowOnMouseWheel;
+                     origWindowOnMouseWheel = null;
+                  }
+               };
             }
          }
       };
