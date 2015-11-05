@@ -1,6 +1,6 @@
 {
    "name": "laxar-details-layer-widget",
-   "version": "0.1.0-pre",
+   "version": "0.1.0",
    "description": "Displays a simple details layer, growing from a source element with animation.",
    "license": "MIT",
    "authors": [ "LaxarJS" ],
