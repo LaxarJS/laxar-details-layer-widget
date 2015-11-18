@@ -118,7 +118,7 @@ define( [
             expect( widgetScope.model.isOpen ).toBe( true );
          } );
 
-         //////////////////////////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
 
          it( 'publishes a didChangeVisibilityEvent for the area', function() {
             expect( widgetEventBus.publish ).toHaveBeenCalledWith( 'didChangeAreaVisibility.content.true', {
@@ -133,13 +133,19 @@ define( [
             expect( widgetScope.model.sourceElementSelector ).toEqual( '#the-button' );
          } );
 
-         ////////////////////////////////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
 
          it( 'by default cannot be closed by a close icon', function() {
             expect( widgetDom.querySelector( 'button' ) ).toEqual( null );
             widgetScope.functions.closeViaCloseIcon();
 
             expect( widgetScope.model.isOpen ).toBe( true );
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         it( 'adds a bootstrap css class on the body element', function() {
+            expect( [].slice.call( document.body.classList ) ).toContain( 'modal-open' );
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,6 +170,12 @@ define( [
                   area: 'content',
                   visible: false
                } );
+            } );
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            it( 'removes the bootstrap css class on the body element', function() {
+               expect( [].slice.call( document.body.classList ) ).not.toContain( 'modal-open' );
             } );
 
          } );
