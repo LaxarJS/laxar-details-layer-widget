@@ -1,6 +1,6 @@
 {
    "name": "ax-details-layer-widget",
-   "description": "Displays a simple details layer, growing from a source element with animation.",
+   "description": "Displays a simple details layer, growing from a source element with animation to its full size.",
 
    "integration": {
       "technology": "angular",
