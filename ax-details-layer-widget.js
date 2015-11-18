@@ -25,6 +25,14 @@ define( [
          .registerActionsFromFeature( 'open', handleOpenAction )
          .registerActionsFromFeature( 'close', handleCloseAction );
 
+      patterns.visibility.handlerFor( $scope, {
+         onAnyAreaRequest: function() {
+            // respond with the visibility for all nested areas (in this case there is only one)
+            return $scope.model.isOpen;
+         }
+      } );
+      var visibilityRequestPublisher = patterns.visibility.requestPublisherForWidget( $scope );
+
       $scope.functions = {
          closeViaCloseIcon: function() {
             if( !$scope.features.closeIcon.enabled ) {
@@ -34,11 +42,7 @@ define( [
             $scope.model.isOpen = false;
          },
          whenVisibilityChanged: function( visible ) {
-            var areaName = $scope.features.area.name;
-            $scope.eventBus.publish( 'didChangeAreaVisibility.' + areaName + '.' + visible, {
-               area: areaName,
-               visible: visible
-            } );
+            visibilityRequestPublisher( visible );
          }
       };
 
