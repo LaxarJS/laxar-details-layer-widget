@@ -120,15 +120,6 @@ define( [
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-         it( 'publishes a didChangeVisibilityEvent for the area', function() {
-            expect( widgetEventBus.publish ).toHaveBeenCalledWith( 'didChangeAreaVisibility.content.true', {
-               area: 'content',
-               visible: true
-            } );
-         } );
-
-         /////////////////////////////////////////////////////////////////////////////////////////////////////
-
          it( 'reads the source element selector from the event', function() {
             expect( widgetScope.model.sourceElementSelector ).toEqual( '#the-button' );
          } );
@@ -161,15 +152,6 @@ define( [
 
             it( 'sets the layer to closed', function() {
                expect( widgetScope.model.isOpen ).toBe( false );
-            } );
-
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-
-            it( 'publishes a didChangeVisibilityEvent for the area', function() {
-               expect( widgetEventBus.publish ).toHaveBeenCalledWith( 'didChangeAreaVisibility.content.false', {
-                  area: 'content',
-                  visible: false
-               } );
             } );
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////
