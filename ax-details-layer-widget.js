@@ -133,9 +133,9 @@ define( [
                if( sourceElement ) {
 
                   var scaling = boundingBox.width / viewPortWidth();
-
                   element.css( 'top', boundingBox.top + 'px' );
                   element.css( 'left', boundingBox.left + 'px' );
+                  element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
                   element.css( 'transform', 'scale( ' + scaling + ')' );
                   element.css( 'opacity', 0.3 );
 
@@ -150,6 +150,7 @@ define( [
                if( sourceElement ) {
                   element.css( 'top', '' );
                   element.css( 'left', '' );
+                  element.css( 'height', '' );
                   element.css( 'transform', 'scale(1)' );
                   element.css( 'opacity', 1 );
 
@@ -172,6 +173,7 @@ define( [
                   var scaling = boundingBox.width / viewPortWidth();
                   element.css( 'top', boundingBox.top + 'px' );
                   element.css( 'left', boundingBox.left + 'px' );
+                  element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
                   element.css( 'transform', 'scale( ' + scaling + ')' );
                   element.css( 'opacity', 0.3 );
 
