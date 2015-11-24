@@ -20,8 +20,8 @@
       transform-origin: top left;
 
       &.abp-with-source-animation {
-         transition: all 350ms ease-out;
-         transition-property: top, left, transform, opacity;
+         transition: all 500ms ease-in-out;
+         transition-property: top, left, height, transform, opacity;
       }
    }
 

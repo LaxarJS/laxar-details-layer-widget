@@ -16,10 +16,10 @@
           transform-origin: top left;
 }
 .ax-details-layer-widget .abp-details-layer.abp-with-source-animation {
-  -webkit-transition: all 350ms ease-out;
-          transition: all 350ms ease-out;
-  -webkit-transition-property: top, left, -webkit-transform, opacity;
-          transition-property: top, left, transform, opacity;
+  -webkit-transition: all 500ms ease-in-out;
+          transition: all 500ms ease-in-out;
+  -webkit-transition-property: top, left, height, -webkit-transform, opacity;
+          transition-property: top, left, height, transform, opacity;
 }
 .ax-details-layer-widget .abp-close-button {
   position: absolute;
