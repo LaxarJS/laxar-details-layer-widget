@@ -93,7 +93,7 @@ define( [
                if( open && scope.useActiveElement ) {
                   sourceElement = document.activeElement;
                }
-               
+
                if( scope.sourceElementSelector ) {
                   sourceElement = document.querySelector( scope.sourceElementSelector ) || sourceElement;
 
@@ -133,10 +133,11 @@ define( [
                if( sourceElement ) {
 
                   var scaling = boundingBox.width / viewPortWidth();
-                  element.css( 'top', boundingBox.top + 'px' );
-                  element.css( 'left', boundingBox.left + 'px' );
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
-                  element.css( 'transform', 'scale( ' + scaling + ')' );
+                  element.css( 'transform',
+                    'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
+                    'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
+                  );
                   element.css( 'opacity', 0.3 );
 
                   element.addClass( 'abp-with-source-animation' );
@@ -148,10 +149,8 @@ define( [
                element[0].offsetWidth; // Triggering reflow. Otherwise the animation won't work
 
                if( sourceElement ) {
-                  element.css( 'top', '' );
-                  element.css( 'left', '' );
                   element.css( 'height', '' );
-                  element.css( 'transform', 'scale(1)' );
+                  element.css( 'transform', 'translate3d(0, 0, 0) scale3d( 1, 1, 1)' );
                   element.css( 'opacity', 1 );
 
                   element.one( 'transitionend', function() {
@@ -171,10 +170,11 @@ define( [
                   element.addClass( 'abp-with-source-animation' );
 
                   var scaling = boundingBox.width / viewPortWidth();
-                  element.css( 'top', boundingBox.top + 'px' );
-                  element.css( 'left', boundingBox.left + 'px' );
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
-                  element.css( 'transform', 'scale( ' + scaling + ')' );
+                  element.css( 'transform',
+                    'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
+                    'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
+                  );
                   element.css( 'opacity', 0.3 );
 
                   element.one( 'transitionend', function() {
