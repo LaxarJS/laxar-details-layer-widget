@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v0.3.1
+
 - [#4](https://github.com/LaxarJS/ax-details-layer-widget/issues/4): animation: fixed transition of scale+translate in webkit
 
 
