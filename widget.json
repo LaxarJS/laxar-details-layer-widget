@@ -33,7 +33,8 @@
                   "description": "Names of the actions that trigger opening of the details layer.",
                   "items": {
                      "type": "string",
-                     "format": "topic"
+                     "format": "topic",
+                     "axRole": "inlet"
                   },
                   "default": []
                }
@@ -49,7 +50,8 @@
                   "description": "Names of the actions that trigger closing of the details layer.",
                   "items": {
                      "type": "string",
-                     "format": "topic"
+                     "format": "topic",
+                     "axRole": "inlet"
                   },
                   "default": []
                }
