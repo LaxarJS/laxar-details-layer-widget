@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v0.4.0
+
 - [#5](https://github.com/LaxarJS/ax-details-layer-widget/issues/5): descriptor: added page inspection metadata
 - [#4](https://github.com/LaxarJS/ax-details-layer-widget/issues/4): animation: fixed transition of scale+translate in webkit
 
