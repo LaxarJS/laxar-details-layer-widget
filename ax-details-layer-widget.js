@@ -81,6 +81,7 @@ define( [
          link: function( scope, element ) {
 
             element.css( 'display', 'none' );
+            var backdropElement = element.parent().find( '.modal-backdrop' );
 
             var escapeCloseHandler = function( event ) {
                if( event.keyCode === 27 && typeof scope.onClose === 'function' ) {
@@ -154,10 +155,12 @@ define( [
                   element.css( 'opacity', 1 );
 
                   element.one( 'transitionend', function() {
+                     backdropElement.addClass( 'ax-open' );
                      scope.whenVisibilityChanged( true );
                   } );
                }
                else {
+                  backdropElement.addClass( 'ax-open' );
                   scope.whenVisibilityChanged( true );
                }
             }
@@ -177,12 +180,14 @@ define( [
                   );
                   element.css( 'opacity', 0.3 );
 
+                  backdropElement.removeClass( 'ax-open' );
                   element.one( 'transitionend', function() {
                      element.css( 'display', 'none' );
                      scope.whenVisibilityChanged( false );
                   } );
                }
                else {
+                  backdropElement.removeClass( 'ax-open' );
                   element.css( 'display', 'none' );
                   scope.whenVisibilityChanged( false );
                }

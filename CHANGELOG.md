@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#6](https://github.com/LaxarJS/ax-details-layer-widget/issues/6): theming: added possibility to animate backdrop
+
 
 ## v0.4.0
 
