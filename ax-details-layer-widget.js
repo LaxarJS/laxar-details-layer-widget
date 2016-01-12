@@ -89,6 +89,10 @@ define( [
                }
             };
 
+            // For iOS Safari: we need to make the body fixed in order to prevent background scrolling.
+            // To maintain the scroll position, we translate the entire page upwards, and move the layer down.
+            var verticalScrollCorrection;
+
             var sourceElement = null;
             scope.$watch( 'isOpen', function( open ) {
                if( open && scope.useActiveElement ) {
@@ -109,15 +113,37 @@ define( [
 
                if( open ) {
                   openLayer( sourceElement );
+                  verticalScrollCorrection = document.body.scrollTop;
+
+                  element.parent().children().each( function( _, child ) {
+                     var ch = ng.element( child );
+                     ch.css( 'top', parseInt( ch.css( 'top' ) ) + verticalScrollCorrection + 'px' );
+                  } );
+
                   ng.element( document.body )
                      .on( 'keyup', escapeCloseHandler )
-                     .addClass( 'modal-open' );
+                     .addClass( 'modal-open' )
+                     .css( 'position', 'fixed' )
+                     .css( 'transform', 'translateY( -' + verticalScrollCorrection + 'px )' );
                }
                else {
                   closeLayer( sourceElement );
+                  if( verticalScrollCorrection !== undefined ) {
+                     element.parent().children().each( function( _, child ) {
+                        var ch = ng.element( child );
+                        ch.css( 'top', parseInt( ch.css( 'top' ) ) - verticalScrollCorrection + 'px' );
+                     } );
+                  }
+
                   ng.element( document.body )
                      .off( 'keyup', escapeCloseHandler )
-                     .removeClass( 'modal-open' );
+                     .removeClass( 'modal-open' )
+                     .css( 'position', '' )
+                     .css( 'transform', '' );
+
+                  if( verticalScrollCorrection !== undefined ) {
+                     document.body.scrollTop = verticalScrollCorrection;
+                  }
                }
             } );
 
