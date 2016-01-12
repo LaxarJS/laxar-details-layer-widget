@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v0.5.1
+
 - [#8](https://github.com/LaxarJS/ax-details-layer-widget/issues/8): iOS: prevent background scrolling on mobile safari
 
 
