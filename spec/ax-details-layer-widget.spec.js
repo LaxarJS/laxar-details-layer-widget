@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 LaxarJS
+ * Copyright 2015 aixigo AG
  * Released under the MIT license
  * www.laxarjs.org
  */
@@ -91,7 +91,7 @@ define( [
          catch( e ) {
             it( 'the current browser does not support DOM Level 4 events', function() {
                window.console.log( 'The current browser does not support DOM Level 4 events.' );
-               window.console.log( 'There won\'t be any hacky workarounds for legacy apis here.' );
+               window.console.log( 'There won\'t be any hacky workarounds for legacy APIs here.' );
                expect( true ).toBe( true );
             } );
             return;
@@ -108,7 +108,7 @@ define( [
             } );
             axMocks.eventBus.flush();
             // fake transition being finished
-            widgetDom.querySelector( '.abp-details-layer' )
+            widgetDom.querySelector( '.ax-details-layer' )
                .dispatchEvent( new window.TransitionEvent( 'transitionend' ) );
          } );
 
@@ -128,9 +128,6 @@ define( [
 
          it( 'by default cannot be closed by a close icon', function() {
             expect( widgetDom.querySelector( 'button' ) ).toEqual( null );
-            widgetScope.functions.closeViaCloseIcon();
-
-            expect( widgetScope.model.isOpen ).toBe( true );
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +181,7 @@ define( [
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
          it( 'it is closed when activating the close icon', function() {
-            widgetScope.functions.closeViaCloseIcon();
+            widgetScope.functions.close();
 
             expect( widgetScope.model.isOpen ).toBe( false );
          } );

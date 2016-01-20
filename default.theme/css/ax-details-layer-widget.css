@@ -1,9 +1,9 @@
 /**
- * Copyright 2015 LaxarJS
+ * Copyright 2015 aixigo AG
  * Released under the MIT license
  * www.laxarjs.org
  */
-.ax-details-layer-widget .abp-details-layer {
+.ax-details-layer-widget .ax-details-layer {
   position: fixed;
   top: 0;
   left: 0;
@@ -15,21 +15,22 @@
       -ms-transform-origin: top left;
           transform-origin: top left;
 }
-.ax-details-layer-widget .abp-details-layer.abp-with-source-animation {
+.ax-details-layer-widget .ax-details-layer.ax-details-layer-with-source-animation {
   -webkit-transition: all 500ms ease-in-out;
           transition: all 500ms ease-in-out;
   -webkit-transition-property: top, left, height, -webkit-transform, opacity;
           transition-property: top, left, height, transform, opacity;
 }
-.ax-details-layer-widget .abp-close-button {
+.ax-details-layer-widget .ax-details-layer-close-button {
   position: absolute;
-  top: 60px;
-  right: 40px;
+  top: 30px;
+  right: 30px;
   cursor: pointer;
 }
-.ax-details-layer-widget .abp-layer-content {
+.ax-details-layer-widget .ax-details-layer-content {
   position: relative;
   top: 80px;
+  z-index: 1002;
   overflow-x: hidden;
   overflow-y: auto;
   height: -webkit-calc(100% - 80px);
