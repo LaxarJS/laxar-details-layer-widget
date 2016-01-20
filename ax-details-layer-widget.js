@@ -50,7 +50,6 @@ define( [
             $scope.model.sourceElementSelector =
                ax.object.path( event, $scope.features.animateFrom.actionSelectorPath, null );
          }
-
          $scope.model.isOpen = true;
       }
 
@@ -87,10 +86,13 @@ define( [
 
             // For iOS Safari: we need to make the body fixed in order to prevent background scrolling.
             // To maintain the scroll position, we translate the entire page upwards, and move the layer down.
-            var verticalScrollCorrection;
+            var previousPageYOffset;
 
             var sourceElement = null;
-            scope.$watch( 'isOpen', function( open ) {
+            scope.$watch( 'isOpen', function( open, wasOpen ) {
+               if( open === wasOpen ) {
+                  return;
+               }
                if( open && scope.useActiveElement ) {
                   sourceElement = document.activeElement;
                }
@@ -99,8 +101,8 @@ define( [
                   sourceElement = document.querySelector( scope.sourceElementSelector ) || sourceElement;
 
                   if( !sourceElement ) {
-                     ax.log.warn( 'Received source element selector [0], ' +
-                        'but the according DOM element could not be found.', scope.sourceElementSelector );
+                     ax.log.warn( 'laxar-details-layer-widget: source element selector [0] ' +
+                        'does not match anything.', scope.sourceElementSelector );
                   }
                }
 
@@ -109,37 +111,9 @@ define( [
 
                if( open ) {
                   openLayer( sourceElement );
-                  verticalScrollCorrection = document.body.scrollTop;
-
-                  element.parent().children().each( function( _, child ) {
-                     var ch = ng.element( child );
-                     ch.css( 'top', parseInt( ch.css( 'top' ) ) + verticalScrollCorrection + 'px' );
-                  } );
-
-                  ng.element( document.body )
-                     .on( 'keyup', escapeCloseHandler )
-                     .addClass( 'modal-open' )
-                     .css( 'position', 'fixed' )
-                     .css( 'transform', 'translateY( -' + verticalScrollCorrection + 'px )' );
                }
                else {
                   closeLayer( sourceElement );
-                  if( verticalScrollCorrection !== undefined ) {
-                     element.parent().children().each( function( _, child ) {
-                        var ch = ng.element( child );
-                        ch.css( 'top', parseInt( ch.css( 'top' ) ) - verticalScrollCorrection + 'px' );
-                     } );
-                  }
-
-                  ng.element( document.body )
-                     .off( 'keyup', escapeCloseHandler )
-                     .removeClass( 'modal-open' )
-                     .css( 'position', '' )
-                     .css( 'transform', '' );
-
-                  if( verticalScrollCorrection !== undefined ) {
-                     document.body.scrollTop = verticalScrollCorrection;
-                  }
                }
             } );
 
@@ -154,15 +128,13 @@ define( [
             function openLayer( sourceElement ) {
                var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
                if( sourceElement ) {
-
-                  var scaling = boundingBox.width / viewPortWidth();
+                  var scaling = boundingBox.width / viewportWidth();
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
                   element.css( 'transform',
                     'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
                     'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
                   );
                   element.css( 'opacity', 0.3 );
-
                   element.addClass( 'ax-details-layer-with-source-animation' );
                }
 
@@ -173,17 +145,21 @@ define( [
 
                if( sourceElement ) {
                   element.css( 'height', '' );
-                  element.css( 'transform', 'translate3d(0, 0, 0) scale3d( 1, 1, 1)' );
                   element.css( 'opacity', 1 );
-
-                  element.one( 'transitionend', function() {
-                     backdropElement.addClass( 'ax-details-layer-open' );
-                     scope.whenVisibilityChanged( true );
-                  } );
+                  element.css( 'transform', 'translate3d(0, 0, 0) scale3d( 1, 1, 1)' );
+                  element.one( 'transitionend', completeOpening );
                }
                else {
+                  completeOpening();
+               }
+
+               ///////////////////////////////////////////////////////////////////////////////////////////////
+
+               function completeOpening() {
                   backdropElement.addClass( 'ax-details-layer-open' );
+                  element.removeClass( 'ax-details-layer-with-source-animation' );
                   scope.whenVisibilityChanged( true );
+                  preventBodyScrolling();
                }
             }
 
@@ -194,30 +170,71 @@ define( [
                if( sourceElement ) {
                   element.addClass( 'ax-details-layer-with-source-animation' );
 
-                  var scaling = boundingBox.width / viewPortWidth();
+                  var scaling = boundingBox.width / viewportWidth();
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
+                  element.css( 'opacity', 0.3 );
                   element.css( 'transform',
                     'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
                     'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
                   );
-                  element.css( 'opacity', 0.3 );
-
-                  backdropElement.removeClass( 'ax-open' );
-                  element.one( 'transitionend', function() {
-                     element.css( 'display', 'none' );
-                     scope.whenVisibilityChanged( false );
-                  } );
+                  backdropElement.removeClass( 'ax-details-layer-open' );
+                  element.one( 'transitionend', completeClosing );
                }
                else {
-                  backdropElement.removeClass( 'ax-open' );
+                  backdropElement.removeClass( 'ax-details-layer-open' );
+                  completeClosing();
+               }
+
+               ///////////////////////////////////////////////////////////////////////////////////////////////
+
+               function completeClosing() {
                   element.css( 'display', 'none' );
                   scope.whenVisibilityChanged( false );
+                  restoreBodyScrolling();
                }
             }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
-            function viewPortWidth() {
+            function preventBodyScrolling() {
+               previousPageYOffset = window.pageYOffset;
+
+               element.parent().children().each( function( _, child ) {
+                  var ch = ng.element( child );
+                  ch.css( 'top', parseInt( ch.css( 'top' ) ) + previousPageYOffset + 'px' );
+               } );
+
+               ng.element( document.body )
+                  .on( 'keyup', escapeCloseHandler )
+                  .addClass( 'modal-open' )
+                  .css( 'position', 'fixed' )
+                  .css( 'transform', 'translateY( -' + previousPageYOffset + 'px )' );
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function restoreBodyScrolling() {
+               if( previousPageYOffset !== undefined ) {
+                  element.parent().children().each( function( _, child ) {
+                     var ch = ng.element( child );
+                     ch.css( 'top', parseInt( ch.css( 'top' ) ) - previousPageYOffset + 'px' );
+                  } );
+               }
+
+               ng.element( document.body )
+                  .off( 'keyup', escapeCloseHandler )
+                  .removeClass( 'modal-open' )
+                  .css( 'position', '' )
+                  .css( 'transform', '' );
+
+               if( previousPageYOffset !== undefined ) {
+                  window.scrollTo( window.pageXOffset, previousPageYOffset );
+               }
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function viewportWidth() {
                return Math.max( document.documentElement.clientWidth, window.innerWidth || 0 );
             }
 
