@@ -22,7 +22,11 @@ define( [
          axMocks.widget.configure( {
             open: { onActions: [ 'open1', 'open2' ] },
             close: { onActions: [ 'close1', 'close2' ] },
-            animateFrom: { actionSelectorPath: 'data.selector' }
+            animateFrom: { actionSelectorPath: 'data.selector' },
+            navigation: {
+               parameterName: 'thePlace',
+               parameterValue: 'testContent'
+            }
          } );
       } );
 
@@ -138,6 +142,17 @@ define( [
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+         it( 'publishes a navigateRequest event for the configured place parameter', function() {
+            expect( widgetEventBus.publish ).toHaveBeenCalledWith( 'navigateRequest._self', {
+               target: '_self',
+               data: {
+                  thePlace: 'testContent'
+               }
+            } );
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
          describe( 'and again a close action is received', function() {
 
             beforeEach( function() {
@@ -155,6 +170,65 @@ define( [
 
             it( 'removes the bootstrap css class on the body element', function() {
                expect( [].slice.call( document.body.classList ) ).not.toContain( 'modal-open' );
+            } );
+
+         } );
+
+      } );
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      describe( 'when a didNavigate event is received', function() {
+
+         describe( 'without the configured place parameter', function() {
+
+            beforeEach( function() {
+               axMocks.eventBus.publish( 'didNavigate._self', {} );
+               axMocks.eventBus.flush();
+            } );
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            it( 'does not open the layer', function() {
+               expect( widgetScope.model.isOpen ).toBe( false );
+            } );
+
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         describe( 'matching the configured place parameter, but not the value', function() {
+
+            beforeEach( function() {
+               axMocks.eventBus.publish( 'didNavigate._self', {
+                  data: { thePlace: 'otherContent' }
+               } );
+               axMocks.eventBus.flush();
+            } );
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            it( 'does not open the layer', function() {
+               expect( widgetScope.model.isOpen ).toBe( false );
+            } );
+
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         describe( 'matching the configured place parameter and value', function() {
+
+            beforeEach( function() {
+               axMocks.eventBus.publish( 'didNavigate._self', {
+                  data: { thePlace: 'testContent' }
+               } );
+               axMocks.eventBus.flush();
+            } );
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            it( 'opens the layer', function() {
+               expect( widgetScope.model.isOpen ).toBe( true );
             } );
 
          } );

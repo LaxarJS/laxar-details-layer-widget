@@ -35,7 +35,9 @@ define( [
 
       $scope.functions = {
          close: function() {
-            $scope.model.isOpen = false;
+            if( $scope.features.closeIcon.enabled ) {
+               handleCloseAction();
+            }
          },
          whenVisibilityChanged: function( visible ) {
             visibilityRequestPublisher( visible );
@@ -44,19 +46,63 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+      if( usesPlaceParameter() ) {
+         $scope.eventBus.subscribe( 'didNavigate', function( event ) {
+            var navSettings = $scope.features.navigation;
+            $scope.model.isOpen = event.data != null &&
+               ( event.data[ navSettings.parameterName ] === navSettings.parameterValue );
+         } );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       function handleOpenAction( event ) {
-         $scope.model.sourceElementSelector = null;
-         if( $scope.features.animateFrom.actionSelectorPath ) {
-            $scope.model.sourceElementSelector =
-               ax.object.path( event, $scope.features.animateFrom.actionSelectorPath, null );
+         if( $scope.model.isOpen ) {
+            return;
          }
+
          $scope.model.isOpen = true;
+         $scope.model.sourceElementSelector = $scope.features.animateFrom.actionSelectorPath ?
+            ax.object.path( event, $scope.features.animateFrom.actionSelectorPath, null ) :
+            null;
+
+         publishPlaceParameter();
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function handleCloseAction() {
+         if( !$scope.model.isOpen ) {
+            return;
+         }
          $scope.model.isOpen = false;
+         publishPlaceParameter();
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function usesPlaceParameter() {
+         var navSettings = $scope.features.navigation;
+         return navSettings.parameterName && navSettings.parameterValue;
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function publishPlaceParameter() {
+         if( !usesPlaceParameter() ) {
+            return;
+         }
+         var navSettings = $scope.features.navigation;
+         if( navSettings.parameterName && navSettings.parameterValue ) {
+            var parameters = {};
+            parameters[ navSettings.parameterName ] = $scope.model.isOpen ?
+               navSettings.parameterValue :
+               null;
+            $scope.eventBus.publish( 'navigateRequest._self', {
+               target: '_self',
+               data: parameters
+            } );
+         }
       }
 
    }
@@ -93,10 +139,10 @@ define( [
                if( open === wasOpen ) {
                   return;
                }
+
                if( open && scope.useActiveElement ) {
                   sourceElement = document.activeElement;
                }
-
                if( scope.sourceElementSelector ) {
                   sourceElement = document.querySelector( scope.sourceElementSelector ) || sourceElement;
 
@@ -156,6 +202,9 @@ define( [
                ///////////////////////////////////////////////////////////////////////////////////////////////
 
                function completeOpening() {
+                  ng.element( document.body )
+                     .on( 'keyup', escapeCloseHandler )
+                     .addClass( 'modal-open' );
                   backdropElement.addClass( 'ax-details-layer-open' );
                   element.removeClass( 'ax-details-layer-with-source-animation' );
                   scope.whenVisibilityChanged( true );
@@ -167,6 +216,9 @@ define( [
 
             function closeLayer( sourceElement ) {
                var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
+               ng.element( document.body )
+                  .off( 'keyup', escapeCloseHandler )
+                  .removeClass( 'modal-open' );
                if( sourceElement ) {
                   element.addClass( 'ax-details-layer-with-source-animation' );
 
@@ -202,12 +254,10 @@ define( [
 
                element.parent().children().each( function( _, child ) {
                   var ch = ng.element( child );
-                  ch.css( 'top', parseInt( ch.css( 'top' ) ) + previousPageYOffset + 'px' );
+                  ch.css( 'top', parseFloat( ch.css( 'top' ) ) + previousPageYOffset + 'px' );
                } );
 
                ng.element( document.body )
-                  .on( 'keyup', escapeCloseHandler )
-                  .addClass( 'modal-open' )
                   .css( 'position', 'fixed' )
                   .css( 'transform', 'translateY( -' + previousPageYOffset + 'px )' );
             }
@@ -218,13 +268,11 @@ define( [
                if( previousPageYOffset !== undefined ) {
                   element.parent().children().each( function( _, child ) {
                      var ch = ng.element( child );
-                     ch.css( 'top', parseInt( ch.css( 'top' ) ) - previousPageYOffset + 'px' );
+                     ch.css( 'top', parseFloat( ch.css( 'top' ) ) - previousPageYOffset + 'px' );
                   } );
                }
 
                ng.element( document.body )
-                  .off( 'keyup', escapeCloseHandler )
-                  .removeClass( 'modal-open' )
                   .css( 'position', '' )
                   .css( 'transform', '' );
 

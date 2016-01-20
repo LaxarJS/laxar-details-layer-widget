@@ -85,6 +85,22 @@
                   "description": "JSON path to the action event property to interpret as css selector to animate from."
                }
             }
+         },
+
+         "navigation": {
+            "type": "object",
+            "description": "Specify a parameter name and value to enable URL representation of this layer's visiblity state",
+            "properties": {
+               "parameterName": {
+                  "type": "string",
+                  "description": "Place parameter to use for indicating the currently visible details"
+               },
+
+               "parameterValue": {
+                  "type": "string",
+                  "description": "Parameter value associated with opening this details layer instance."
+               }
+            }
          }
 
       }

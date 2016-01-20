@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#10](https://github.com/LaxarJS/ax-details-layer-widget/issues/10): allow to reflect and control visibility state in URL
 - [#12](https://github.com/LaxarJS/ax-details-layer-widget/issues/12): fixed jumping of background page when layer opens
 - [#7](https://github.com/LaxarJS/ax-details-layer-widget/issues/7): fixed CSS class names and copyright holder
     + **BREAKING CHANGE:** see ticket for details
