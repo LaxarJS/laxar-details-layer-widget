@@ -177,7 +177,6 @@ define( [
                   element.css( 'opacity', 1 );
 
                   element.one( 'transitionend', function() {
-                     console.log( "t-end" );
                      backdropElement.addClass( 'ax-details-layer-open' );
                      scope.whenVisibilityChanged( true );
                   } );
