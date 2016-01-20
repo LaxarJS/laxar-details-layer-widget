@@ -1,20 +1,21 @@
-<div class="modal-backdrop fade in" data-ng-show="model.isOpen"></div>
+<div class="modal-backdrop fade in"
+     ng-show="model.isOpen"></div>
 
-<div class="abp-details-layer"
-     data-ax-details-layer-widget-layer
-     data-is-open="model.isOpen"
-     data-source-element-selector="model.sourceElementSelector"
-     data-use-active-element="features.animateFrom.activeElement"
-     data-on-close="functions.closeViaCloseIcon"
-     data-when-visibility-changed="functions.whenVisibilityChanged">
+<div class="ax-details-layer"
+     ax-details-layer
+     ax-details-layer-is-open="model.isOpen"
+     ax-details-layer-on-close="functions.closeViaCloseIcon"
+     ax-details-layer-source-element-selector="model.sourceElementSelector"
+     ax-details-layer-use-active-element="features.animateFrom.activeElement"
+     ax-details-layer-when-visibility-changed="functions.whenVisibilityChanged">
 
    <button type="button"
-           class="abp-close-button fa fa-times"
-           data-ng-click="functions.closeViaCloseIcon();"
-           data-ng-if="features.closeIcon.enabled"
+           ng-if="features.closeIcon.enabled"
+           ng-click="functions.close();"
+           class="ax-details-layer-close-button fa fa-times"
          ></button>
 
-   <div class="abp-layer-content"
+   <div class="ax-details-layer-content"
         data-ax-widget-area
         data-ax-widget-area-binding="features.area.name"></div>
 

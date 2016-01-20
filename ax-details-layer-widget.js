@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 LaxarJS
+ * Copyright 2015 aixigo AG
  * Released under the MIT license
  * www.laxarjs.org
  */
@@ -34,11 +34,7 @@ define( [
       var visibilityRequestPublisher = patterns.visibility.requestPublisherForWidget( $scope );
 
       $scope.functions = {
-         closeViaCloseIcon: function() {
-            if( !$scope.features.closeIcon.enabled ) {
-               return;
-            }
-
+         close: function() {
             $scope.model.isOpen = false;
          },
          whenVisibilityChanged: function( visible ) {
@@ -68,15 +64,15 @@ define( [
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   var layerDirectiveName = 'axDetailsLayerWidgetLayer';
+   var layerDirectiveName = 'axDetailsLayer';
    var layerDirective = [ function() {
       return {
          scope: {
-            isOpen: '=',
-            sourceElementSelector: '=',
-            useActiveElement: '=',
-            onClose: '=',
-            whenVisibilityChanged: '='
+            isOpen: '=' + layerDirectiveName + 'IsOpen',
+            sourceElementSelector: '=' + layerDirectiveName + 'SourceElementSelector',
+            useActiveElement: '=' + layerDirectiveName + 'UseActiveElement',
+            onClose: '=' + layerDirectiveName + 'OnClose',
+            whenVisibilityChanged: '=' + layerDirectiveName + 'WhenVisibilityChanged',
          },
          link: function( scope, element ) {
 
@@ -109,7 +105,7 @@ define( [
                }
 
                // reset class. Will be set on-demand in the following
-               element.removeClass( 'abp-with-source-animation' );
+               element.removeClass( 'ax-details-layer-with-source-animation' );
 
                if( open ) {
                   openLayer( sourceElement );
@@ -167,7 +163,7 @@ define( [
                   );
                   element.css( 'opacity', 0.3 );
 
-                  element.addClass( 'abp-with-source-animation' );
+                  element.addClass( 'ax-details-layer-with-source-animation' );
                }
 
                element.css( 'display', 'block' );
@@ -181,12 +177,13 @@ define( [
                   element.css( 'opacity', 1 );
 
                   element.one( 'transitionend', function() {
-                     backdropElement.addClass( 'ax-open' );
+                     console.log( "t-end" );
+                     backdropElement.addClass( 'ax-details-layer-open' );
                      scope.whenVisibilityChanged( true );
                   } );
                }
                else {
-                  backdropElement.addClass( 'ax-open' );
+                  backdropElement.addClass( 'ax-details-layer-open' );
                   scope.whenVisibilityChanged( true );
                }
             }
@@ -196,7 +193,7 @@ define( [
             function closeLayer( sourceElement ) {
                var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
                if( sourceElement ) {
-                  element.addClass( 'abp-with-source-animation' );
+                  element.addClass( 'ax-details-layer-with-source-animation' );
 
                   var scaling = boundingBox.width / viewPortWidth();
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
