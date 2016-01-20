@@ -172,7 +172,7 @@ define( [
 
                   var scaling = boundingBox.width / viewportWidth();
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
-                  element.css( 'opacity', 0.3 );
+                  element.css( 'opacity', 0 );
                   element.css( 'transform',
                     'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
                     'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
@@ -188,6 +188,7 @@ define( [
                ///////////////////////////////////////////////////////////////////////////////////////////////
 
                function completeClosing() {
+                  element.removeClass( 'ax-details-layer-with-source-animation' );
                   element.css( 'display', 'none' );
                   scope.whenVisibilityChanged( false );
                   restoreBodyScrolling();
