@@ -215,7 +215,9 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function closeLayer( sourceElement ) {
+               restoreBodyScrolling();
                var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
+               backdropElement.removeClass( 'ax-details-layer-open' );
                ng.element( document.body )
                   .off( 'keyup', escapeCloseHandler )
                   .removeClass( 'modal-open' );
@@ -229,11 +231,9 @@ define( [
                     'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
                     'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
                   );
-                  backdropElement.removeClass( 'ax-details-layer-open' );
                   element.one( 'transitionend', completeClosing );
                }
                else {
-                  backdropElement.removeClass( 'ax-details-layer-open' );
                   completeClosing();
                }
 
@@ -243,7 +243,6 @@ define( [
                   element.removeClass( 'ax-details-layer-with-source-animation' );
                   element.css( 'display', 'none' );
                   scope.whenVisibilityChanged( false );
-                  restoreBodyScrolling();
                }
             }
 
