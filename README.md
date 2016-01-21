@@ -1,4 +1,4 @@
-# laxar-details-layer-widget
+# laxar-details-layer-widget [![Build Status](https://travis-ci.org/LaxarJS/ax-details-layer-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/ax-details-layer-widget)
 
 > Displays a simple details layer, growing from a source element with animation.
 
@@ -42,4 +42,4 @@ This should only be disabled, if the source of animation does not correspond to 
 
 A JSON path to the property within the action event object, that carries the selector for the animation source element.
 If this is configured, it will always have precedence over the activeElement if found on the page.
-In case *animateFrom.activeElement* is configured to be `false` and the element is not found, a warning will be logged. 
+In case *animateFrom.activeElement* is configured to be `false` and the element is not found, a warning will be logged.

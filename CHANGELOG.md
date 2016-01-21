@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#14](https://github.com/LaxarJS/ax-details-layer-widget/issues/14): added travis CI
 - [#13](https://github.com/LaxarJS/ax-details-layer-widget/issues/13): fixed close animation appearance
 - [#10](https://github.com/LaxarJS/ax-details-layer-widget/issues/10): allow to reflect and control visibility state in URL
 - [#12](https://github.com/LaxarJS/ax-details-layer-widget/issues/12): fixed jumping of background page when layer opens
