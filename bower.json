@@ -1,15 +1,15 @@
 {
    "name": "laxar-details-layer-widget",
-   "version": "1.0.0-alpha.0",
+   "version": "1.0.0-alpha.1",
    "description": "Displays a simple details layer, growing from a source element with animation to its full size.",
    "license": "MIT",
    "authors": [ "LaxarJS" ],
    "dependencies": {
-      "laxar": "~1.1.0",
-      "laxar-patterns": "~1.1.0",
+      "laxar": "~1.2.0",
+      "laxar-patterns": "~1.2.0",
       "laxar-uikit": "~1.1.0"
    },
    "devDependencies": {
-      "laxar-mocks": "~0.6.0"
+      "laxar-mocks": "~1.0.0"
    }
 }
