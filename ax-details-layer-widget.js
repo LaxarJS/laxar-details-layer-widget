@@ -117,7 +117,7 @@ define( [
             sourceElementSelector: '=' + layerDirectiveName + 'SourceElementSelector',
             useActiveElement: '=' + layerDirectiveName + 'UseActiveElement',
             onClose: '=' + layerDirectiveName + 'OnClose',
-            whenVisibilityChanged: '=' + layerDirectiveName + 'WhenVisibilityChanged',
+            whenVisibilityChanged: '=' + layerDirectiveName + 'WhenVisibilityChanged'
          },
          link: function( scope, element ) {
 
@@ -130,8 +130,6 @@ define( [
                }
             };
 
-            // For iOS Safari: we need to make the body fixed in order to prevent background scrolling.
-            // To maintain the scroll position, we translate the entire page upwards, and move the layer down.
             var previousPageYOffset;
 
             var sourceElement = null;
@@ -177,8 +175,8 @@ define( [
                   var scaling = boundingBox.width / viewportWidth();
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
                   element.css( 'transform',
-                    'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
-                    'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
+                     'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
+                     'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
                   );
                   element.css( 'opacity', 0.3 );
                   element.addClass( 'ax-details-layer-with-source-animation' );
@@ -208,14 +206,23 @@ define( [
                   backdropElement.addClass( 'ax-details-layer-open' );
                   element.removeClass( 'ax-details-layer-with-source-animation' );
                   scope.whenVisibilityChanged( true );
-                  preventBodyScrolling();
+
+                  // Issue (#8):
+                  // For iOS Safari: we need to make the body fixed in order to prevent background scrolling.
+                  // To maintain the scroll position, we translate the entire page upwards, and move the layer down.
+                  // Thus we only execute the additional code when the user agent might use the apple webkit engine.
+                  if( isWebKit() ) {
+                     preventBodyScrolling();
+                  }
                }
             }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function closeLayer( sourceElement ) {
-               restoreBodyScrolling();
+               if( isWebKit() ) {
+                  restoreBodyScrolling();
+               }
                var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
                backdropElement.removeClass( 'ax-details-layer-open' );
                ng.element( document.body )
@@ -228,8 +235,8 @@ define( [
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
                   element.css( 'opacity', 0 );
                   element.css( 'transform',
-                    'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
-                    'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
+                     'translate3d( ' + boundingBox.left + 'px, ' + boundingBox.top + 'px, 0 )' +
+                     'scale3d( ' + scaling + ', ' + scaling + ', 1 ) '
                   );
                   element.one( 'transitionend', completeClosing );
                }
@@ -286,6 +293,11 @@ define( [
                return Math.max( document.documentElement.clientWidth, window.innerWidth || 0 );
             }
 
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function isWebKit() {
+               return navigator.userAgent.match( /AppleWebKit/ );
+            }
          }
       };
    } ];

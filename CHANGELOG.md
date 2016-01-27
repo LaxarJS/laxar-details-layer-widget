@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#15](https://github.com/LaxarJS/ax-details-layer-widget/issues/15): fixed details layer in ie11
+
 
 ## v1.0.0-alpha.0
 
