@@ -2,9 +2,13 @@
 
 ## Last Changes
 
+
+## v1.0.0-alpha.2
+
 - [#15](https://github.com/LaxarJS/ax-details-layer-widget/issues/15): fixed details layer in ie11
 
 
+## v1.0.0-alpha.1
 ## v1.0.0-alpha.0
 
 - [#14](https://github.com/LaxarJS/ax-details-layer-widget/issues/14): added travis CI
