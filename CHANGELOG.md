@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+## v1.0.0
+
 - [#16](https://github.com/LaxarJS/ax-details-layer-widget/issues/16): by default, scroll to top when opened
     + **BREAKING CHANGE:** see ticket for details
 
