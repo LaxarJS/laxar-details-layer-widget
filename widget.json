@@ -37,6 +37,12 @@
                      "axRole": "inlet"
                   },
                   "default": []
+               },
+
+               "resetPosition": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "If true (default) the popup content will be scrolled to top when opened."
                }
             }
          },

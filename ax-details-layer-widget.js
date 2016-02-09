@@ -117,7 +117,8 @@ define( [
             sourceElementSelector: '=' + layerDirectiveName + 'SourceElementSelector',
             useActiveElement: '=' + layerDirectiveName + 'UseActiveElement',
             onClose: '=' + layerDirectiveName + 'OnClose',
-            whenVisibilityChanged: '=' + layerDirectiveName + 'WhenVisibilityChanged'
+            whenVisibilityChanged: '=' + layerDirectiveName + 'WhenVisibilityChanged',
+            resetOnOpen: '=' + layerDirectiveName + 'ResetOnOpen'
          },
          link: function( scope, element ) {
 
@@ -186,6 +187,12 @@ define( [
 
                /*jshint -W030:false */
                element[0].offsetWidth; // Triggering reflow. Otherwise the animation won't work
+
+               // scroll content layer to top:
+               if( scope.resetOnOpen ) {
+                  var content = ng.element( '.ax-details-layer-content', element )[ 0 ];
+                  content.scrollTop = 0;
+               }
 
                if( sourceElement ) {
                   element.css( 'height', '' );

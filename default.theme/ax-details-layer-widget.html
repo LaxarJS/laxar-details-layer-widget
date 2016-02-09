@@ -6,8 +6,9 @@
      ax-details-layer-is-open="model.isOpen"
      ax-details-layer-on-close="functions.close"
      ax-details-layer-source-element-selector="model.sourceElementSelector"
-     ax-details-layer-use-active-element="features.animateFrom.activeElement"
-     ax-details-layer-when-visibility-changed="functions.whenVisibilityChanged">
+     ax-details-layer-when-visibility-changed="functions.whenVisibilityChanged"
+     ax-details-layer-use-active-element=":: features.animateFrom.activeElement"
+     ax-details-layer-reset-on-open=":: features.open.resetPosition">
 
    <button type="button"
            ng-if="features.closeIcon.enabled"
@@ -17,6 +18,6 @@
 
    <div class="ax-details-layer-content"
         data-ax-widget-area
-        data-ax-widget-area-binding="features.area.name"></div>
+        data-ax-widget-area-binding=":: features.area.name"></div>
 
 </div>
