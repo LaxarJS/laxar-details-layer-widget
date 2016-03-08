@@ -43,3 +43,17 @@ This should only be disabled, if the source of animation does not correspond to 
 A JSON path to the property within the action event object, that carries the selector for the animation source element.
 If this is configured, it will always have precedence over the activeElement if found on the page.
 In case *animateFrom.activeElement* is configured to be `false` and the element is not found, a warning will be logged.
+
+
+### *logTag.name*
+
+Name of a log tag to set when the popup layer is opened.
+As soon as the layer is closed again, the log tag is removed.
+Note that the log tag is only set if `logTag.value` is also set.
+
+
+### *logTag.value*
+
+Value of a log tag to set when the popup layer is opened.
+As soon as the layer is closed again, the log tag is removed.
+Note that the log tag is only set if `logTag.name` is also set.

@@ -2,6 +2,10 @@
 
 ## Last Changes
 
+- [#18](https://github.com/LaxarJS/ax-details-layer-widget/issues/18): added feature for log tag to set while layer is open
+    + NEW FEATURE: see ticket for details
+
+
 ## v1.0.0
 
 - [#16](https://github.com/LaxarJS/ax-details-layer-widget/issues/16): by default, scroll to top when opened

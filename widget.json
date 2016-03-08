@@ -107,6 +107,22 @@
                   "description": "Parameter value associated with opening this details layer instance."
                }
             }
+         },
+
+         "logTag": {
+            "type": "object",
+            "description": "Configuration for a log tag to set while the layer is opened",
+            "properties": {
+               "name": {
+                  "type": "string",
+                  "description": "Name of the log tag. Should be four upper case letters."
+               },
+
+               "value": {
+                  "type": "string",
+                  "description": "Value for the log tag."
+               }
+            }
          }
 
       }

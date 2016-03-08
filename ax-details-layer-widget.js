@@ -67,6 +67,11 @@ define( [
             null;
 
          publishPlaceParameter();
+
+         var logTag = $scope.features.logTag;
+         if( logTag.name && logTag.value ) {
+            ax.log.setTag( logTag.name, logTag.value );
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +82,11 @@ define( [
          }
          $scope.model.isOpen = false;
          publishPlaceParameter();
+
+         var logTag = $scope.features.logTag;
+         if( logTag.name && logTag.value ) {
+            ax.log.removeTag( logTag.name );
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
