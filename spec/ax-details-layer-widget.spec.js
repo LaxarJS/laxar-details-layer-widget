@@ -5,9 +5,10 @@
  */
 define( [
    'json!../widget.json',
+   'laxar',
    'laxar-mocks',
    'angular-mocks'
-], function( descriptor, axMocks, ngMocks ) {
+], function( descriptor, ax, axMocks, ngMocks ) {
    'use strict';
 
    describe( 'The ax-details-layer-widget', function() {
@@ -258,6 +259,51 @@ define( [
             widgetScope.functions.close();
 
             expect( widgetScope.model.isOpen ).toBe( false );
+         } );
+
+      } );
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      describe( 'with configured log tag feature', function() {
+
+         beforeEach( function() {
+            spyOn( ax.log, 'setTag' );
+            spyOn( ax.log, 'removeTag' );
+            axMocks.widget.configure( 'logTag.name', 'PPUP' );
+            axMocks.widget.configure( 'logTag.value', 'registration' );
+         } );
+
+         beforeEach( axMocks.widget.load );
+         beforeEach( function() {
+            widgetEventBus = axMocks.widget.axEventBus;
+            widgetScope = axMocks.widget.$scope;
+
+            axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
+            axMocks.eventBus.flush();
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         it( 'sets the log tag when openend', function() {
+            expect( ax.log.setTag ).toHaveBeenCalledWith( 'PPUP', 'registration' );
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         describe( 'when closed again', function() {
+
+            beforeEach( function() {
+               axMocks.eventBus.publish( 'takeActionRequest.close2', { action: 'close2' } );
+               axMocks.eventBus.flush();
+            } );
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            it( 'removes the log tag', function() {
+               expect( ax.log.removeTag ).toHaveBeenCalledWith( 'PPUP' );
+            } );
+
          } );
 
       } );
