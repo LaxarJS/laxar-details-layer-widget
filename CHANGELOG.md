@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+## v1.1.1
+
 - [#19](https://github.com/LaxarJS/ax-details-layer-widget/issues/19): prevent that an element in the background can get the focus by tabbing
 
 
