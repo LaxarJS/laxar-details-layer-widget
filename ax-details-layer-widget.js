@@ -50,7 +50,7 @@ define( [
          $scope.eventBus.subscribe( 'didNavigate', function( event ) {
             var navSettings = $scope.features.navigation;
             $scope.model.isOpen = event.data != null &&
-               ( event.data[ navSettings.parameterName ] === navSettings.parameterValue );
+                                  ( event.data[ navSettings.parameterName ] === navSettings.parameterValue );
          } );
       }
 
@@ -120,7 +120,7 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    var layerDirectiveName = 'axDetailsLayer';
-   var layerDirective = [ function() {
+   var layerDirective = [ '$window', '$document', function( $window, $document ) {
       return {
          scope: {
             isOpen: '=' + layerDirectiveName + 'IsOpen',
@@ -142,6 +142,7 @@ define( [
             };
 
             var previousPageYOffset;
+            var lastTabWasShifted = false;
 
             var sourceElement = null;
             scope.$watch( 'isOpen', function( open, wasOpen ) {
@@ -157,7 +158,7 @@ define( [
 
                   if( !sourceElement ) {
                      ax.log.warn( 'laxar-details-layer-widget: source element selector [0] ' +
-                        'does not match anything.', scope.sourceElementSelector );
+                                  'does not match anything.', scope.sourceElementSelector );
                   }
                }
 
@@ -165,12 +166,99 @@ define( [
                element.removeClass( 'ax-details-layer-with-source-animation' );
 
                if( open ) {
+                  document.addEventListener( 'focus', checkFocus, true );
+                  $document.on( 'keydown', tabCaptureListener );
                   openLayer( sourceElement );
                }
                else {
+                  document.removeEventListener( 'focus', checkFocus );
+                  $document.off( 'keydown', tabCaptureListener );
                   closeLayer( sourceElement );
                }
             } );
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function checkFocus( event ) {
+               var node = event.target;
+               while( node !== document.body && node !== element[ 0 ] ) {
+                  node = node.parentNode;
+               }
+               if( node === document.body ) {
+                  var nextNode = findFirstOrLast( lastTabWasShifted );
+                  secureFocus( nextNode );
+               }
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function tabCaptureListener( event ) {
+               if( event.keyCode === 9 ) {
+                  lastTabWasShifted = event.shiftKey;
+               }
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function findFirstOrLast( useLargest ) {
+               var nodes = [];
+               element.find( 'input,a,button,textarea,select,[tabindex]' ).each( function( index ) {
+                  nodes.push( this );
+               } );
+
+               return nodes.reduce( function( previousNode, currentNode ) {
+
+                  if( !isFocusable( currentNode ) ) {
+                     return previousNode;
+                  }
+
+                  var tabindexCurrent = getTabindex( currentNode );
+                  if( tabindexCurrent < 0 ) {
+                     return previousNode;
+                  }
+                  var tabindexPrevious = getTabindex( previousNode );
+
+                  var currentIsSmaller = tabindexCurrent < tabindexPrevious;
+                  if( useLargest ) {
+                     return currentIsSmaller ? previousNode : currentNode;
+                  }
+                  return currentIsSmaller ? currentNode : previousNode;
+               } );
+
+               ///////////////////////////////////////////////////////////////////////////////////////////////
+
+               function getTabindex( node ) {
+                  var item = node.attributes.getNamedItem( 'tabindex' );
+                  return item ? item.value : 0;
+               }
+
+               ///////////////////////////////////////////////////////////////////////////////////////////////
+
+               function isFocusable( node ) {
+                  if( node.nodeType !== 1 || node.disabled ) {
+                     return false;
+                  }
+                  var computedStyle = $window.getComputedStyle( node );
+                  if( computedStyle.getPropertyValue( 'display' ) === 'none' ) {
+                     return false;
+                  }
+                  if( computedStyle.getPropertyValue( 'visibility' ) === 'hidden' ) {
+                     return false;
+                  }
+                  return node.offsetParent !== null;
+               }
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function secureFocus( node ) {
+               try {
+                  node.focus();
+               }
+               catch( e ) {
+                  // ignore exceptions in IE  when focussing hidden DOM nodes
+               }
+            }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -196,7 +284,7 @@ define( [
                element.css( 'display', 'block' );
 
                /*jshint -W030:false */
-               element[0].offsetWidth; // Triggering reflow. Otherwise the animation won't work
+               element[ 0 ].offsetWidth; // Triggering reflow. Otherwise the animation won't work
 
                // scroll content layer to top:
                if( scope.resetOnOpen ) {
