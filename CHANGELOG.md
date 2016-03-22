@@ -2,9 +2,12 @@
 
 ## Last Changes
 
+- [#19](https://github.com/LaxarJS/ax-details-layer-widget/issues/19): implemented alternative background scrolling prevention
+
+
 ## v1.1.1
 
-- [#19](https://github.com/LaxarJS/ax-details-layer-widget/issues/19): prevent that an element in the background can get the focus by tabbing
+- [#17](https://github.com/LaxarJS/ax-details-layer-widget/issues/17): prevent that an element in the background can get the focus by tabbing
 
 
 ## v1.1.0
