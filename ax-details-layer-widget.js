@@ -301,6 +301,13 @@ define( [
                else {
                   completeOpening();
                }
+               // Issue (#8):
+               // For iOS Safari: we need to make the body fixed in order to prevent background scrolling.
+               // To maintain the scroll position, we translate the entire page upwards, and move the layer down.
+               // Thus we only execute the additional code when the user agent might use the apple webkit engine.
+               if( isWebKit() ) {
+                  preventBodyScrolling();
+               }
 
                ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -311,14 +318,6 @@ define( [
                   backdropElement.addClass( 'ax-details-layer-open' );
                   element.removeClass( 'ax-details-layer-with-source-animation' );
                   scope.whenVisibilityChanged( true );
-
-                  // Issue (#8):
-                  // For iOS Safari: we need to make the body fixed in order to prevent background scrolling.
-                  // To maintain the scroll position, we translate the entire page upwards, and move the layer down.
-                  // Thus we only execute the additional code when the user agent might use the apple webkit engine.
-                  if( isWebKit() ) {
-                     preventBodyScrolling();
-                  }
                }
             }
 
@@ -361,34 +360,62 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function preventBodyScrolling() {
-               previousPageYOffset = window.pageYOffset;
+               // Following body scroll prevention taken from here:
+               // https://github.com/luster-io/prevent-overscroll
+               ng.element( '.ax-details-layer-content', element )
+                  .on( 'touchstart', handleContentTouchStart )
+                  .on( 'touchmove', handleContentTouchMove );
 
-               element.parent().children().each( function( _, child ) {
-                  var ch = ng.element( child );
-                  ch.css( 'top', parseFloat( ch.css( 'top' ) ) + previousPageYOffset + 'px' );
-               } );
-
-               ng.element( document.body )
-                  .css( 'position', 'fixed' )
-                  .css( 'transform', 'translateY( -' + previousPageYOffset + 'px )' );
+               ng.element( document.body ).on( 'touchmove', handleBodyTouchMove );
             }
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function restoreBodyScrolling() {
-               if( previousPageYOffset !== undefined ) {
-                  element.parent().children().each( function( _, child ) {
-                     var ch = ng.element( child );
-                     ch.css( 'top', parseFloat( ch.css( 'top' ) ) - previousPageYOffset + 'px' );
-                  } );
+               ng.element( '.ax-details-layer-content', element )
+                  .off( 'touchstart', handleContentTouchStart )
+                  .off( 'touchmove', handleContentTouchMove );
+
+               ng.element( document.body ).off( 'touchmove', handleBodyTouchMove );
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function handleContentTouchStart() {
+               var contentElement = ng.element( '.ax-details-layer-content', element )[0];
+               var top = contentElement.scrollTop;
+               var totalScroll = contentElement.scrollHeight;
+               var currentScroll = top + contentElement.offsetHeight;
+
+               // If we're at the top or the bottom of the containers scroll, push up or down one pixel.
+               // This prevents the scroll from "passing through" to the body.
+               if( top === 0 ) {
+                  contentElement.scrollTop = 1;
                }
+               else if( currentScroll === totalScroll ) {
+                  contentElement.scrollTop = top - 1;
+               }
+            }
 
-               ng.element( document.body )
-                  .css( 'position', '' )
-                  .css( 'transform', '' );
+            //////////////////////////////////////////////////////////////////////////////////////////////////
 
-               if( previousPageYOffset !== undefined ) {
-                  window.scrollTo( window.pageXOffset, previousPageYOffset );
+            function handleContentTouchMove( event ) {
+               var contentElement = ng.element( '.ax-details-layer-content', element )[0];
+               // If the content is actually scrollable, i.e. the content is long enough
+               // that scrolling can occur
+               if( contentElement.offsetHeight < contentElement.scrollHeight ) {
+                  event.originalEvent._isDetailsLayer = true;
+               }
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function handleBodyTouchMove( event ) {
+               // console.log( event.target, event.originalEvent._isDetailsLayer );
+               // In this case, the default behavior is scrolling the body, which
+               // would result in an overflow. Since we don't want that, we preventDefault.
+               if( !event.originalEvent._isDetailsLayer ) {
+                  event.preventDefault();
                }
             }
 
