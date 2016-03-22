@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+## v1.1.2
+
 - [#19](https://github.com/LaxarJS/ax-details-layer-widget/issues/19): implemented alternative background scrolling prevention
 
 
