@@ -32,6 +32,11 @@ If this is `true`, a small close icon will be rendered, that on click closes the
 Additionally, the layer is closed as soon as the escape key is pressed.
 
 
+### *backdropClose.enabled*
+
+If this is `true`, a click on the modal backdrop closes the layer.
+
+
 ### *animateFrom.activeElement*
 
 The default option is to start the opening animation from the element that triggered opening the details layer through an ui interaction.
