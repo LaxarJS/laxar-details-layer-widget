@@ -265,6 +265,33 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+      describe( 'if configured to be closeable by backdrop click and then opened', function() {
+
+         beforeEach( function() {
+            axMocks.widget.configure( 'backdropClose.enabled', true );
+         } );
+
+         beforeEach( axMocks.widget.load );
+         beforeEach( function() {
+            widgetEventBus = axMocks.widget.axEventBus;
+            widgetScope = axMocks.widget.$scope;
+
+            axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
+            axMocks.eventBus.flush();
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         it( 'it is closed when clicking the modal backdrop', function() {
+            widgetScope.functions.backdropClicked();
+
+            expect( widgetScope.model.isOpen ).toBe( false );
+         } );
+
+      } );
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       describe( 'with configured log tag feature', function() {
 
          beforeEach( function() {

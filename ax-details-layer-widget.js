@@ -39,6 +39,11 @@ define( [
                handleCloseAction();
             }
          },
+         backdropClicked: function() {
+            if( $scope.features.backdropClose.enabled ) {
+               handleCloseAction();
+            }
+         },
          whenVisibilityChanged: function( visible ) {
             visibilityRequestPublisher( visible );
          }

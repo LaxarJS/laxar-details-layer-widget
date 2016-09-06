@@ -76,6 +76,18 @@
             }
          },
 
+         "backdropClose": {
+            "type": "object",
+            "description": "Allow the user to close the popup by a backdrop click.",
+            "properties": {
+               "enabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "If true the popup is closed when the backdrop is clicked."
+               }
+            }
+         },
+
          "animateFrom": {
             "type": "object",
             "description": "Configuration for the animation source.",
