@@ -2,7 +2,14 @@
 
 ## Last Changes
 
+
+## v1.3.0
+
 - [#21](https://github.com/LaxarJS/ax-details-layer-widget/issues/21): added optional close action
+
+
+## v1.2.0
+
 - [#20](https://github.com/LaxarJS/ax-details-layer-widget/issues/20): added backdrop close feature
 - [#19](https://github.com/LaxarJS/ax-details-layer-widget/issues/19): implemented alternative background scrolling prevention
 - [#17](https://github.com/LaxarJS/ax-details-layer-widget/issues/17): prevent that an element in the background can get the focus by tabbing
