@@ -22,7 +22,10 @@ define( [
       beforeEach( function() {
          axMocks.widget.configure( {
             open: { onActions: [ 'open1', 'open2' ] },
-            close: { onActions: [ 'close1', 'close2' ] },
+            close: {
+               onActions: [ 'close1', 'close2' ],
+               action: 'afterClose'
+            },
             animateFrom: { actionSelectorPath: 'data.selector' },
             navigation: {
                parameterName: 'thePlace',
@@ -159,6 +162,9 @@ define( [
             beforeEach( function() {
                axMocks.eventBus.publish( 'takeActionRequest.close2', { action: 'close2' } );
                axMocks.eventBus.flush();
+               // fake close transition being finished
+               widgetDom.querySelector( '.ax-details-layer' )
+                  .dispatchEvent( new window.TransitionEvent( 'transitionend' ) );
             } );
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,6 +177,15 @@ define( [
 
             it( 'removes the bootstrap css class on the body element', function() {
                expect( [].slice.call( document.body.classList ) ).not.toContain( 'modal-open' );
+            } );
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            it( 'publishes the close action', function() {
+               expect( widgetEventBus.publishAndGatherReplies )
+                  .toHaveBeenCalledWith( 'takeActionRequest.afterClose', {
+                     action: 'afterClose'
+                  }, jasmine.any( Object ) );
             } );
 
          } );

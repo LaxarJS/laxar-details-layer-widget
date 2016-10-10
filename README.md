@@ -17,13 +17,18 @@ Depending on the theming, it will span the complete viewport, minus some margins
 ### *open.onActions*
 
 An array of actions the widget will subscribe to and, as soon as it receives one of these actions, open itself.
-This action event may carry the selector for the source element under the path configured as *animateForm.actionSelectorPath*.
+This action event may carry the selector for the source element under the path configured as *animateFrom.actionSelectorPath*.
 
 
 ### *close.onActions*
 
 An array of actions the widget will subscribe to and, as soon as it receives one of these actions, close itself.
 The close animation will always end at the element used to animate the layer open in the first place.
+
+
+### *close.action*
+
+If configured, this will be used as the topic of a `takeActionRequest` event that is send whenever the layer is closed and the closing animation has finished.
 
 
 ### *closeIcon.enabled*

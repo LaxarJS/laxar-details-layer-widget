@@ -60,6 +60,12 @@
                      "axRole": "inlet"
                   },
                   "default": []
+               },
+               "action": {
+                  "type": "string",
+                  "format": "topic",
+                  "axRole": "outlet",
+                  "description": "Name of the action that is published when the layer is closed and all animations are finished."
                }
             }
          },

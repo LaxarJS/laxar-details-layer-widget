@@ -49,6 +49,13 @@ define( [
          }
       };
 
+      if( $scope.features.close.action ) {
+         var closeActionPublisher = patterns.actions.publisherForFeature( $scope, 'close' );
+         $scope.$on( layerDirectiveClosedEvent, function() {
+            closeActionPublisher();
+         } );
+      }
+
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       if( usesPlaceParameter() ) {
@@ -125,6 +132,7 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    var layerDirectiveName = 'axDetailsLayer';
+   var layerDirectiveClosedEvent = layerDirectiveName + '.layerClosed';
    var layerDirective = [ '$window', '$document', function( $window, $document ) {
       return {
          scope: {
@@ -359,6 +367,7 @@ define( [
                   element.removeClass( 'ax-details-layer-with-source-animation' );
                   element.css( 'display', 'none' );
                   scope.whenVisibilityChanged( false );
+                  scope.$emit( layerDirectiveClosedEvent );
                }
             }
 
