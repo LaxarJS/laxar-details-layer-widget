@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v1.4.0
+
 - [#22](https://github.com/LaxarJS/ax-details-layer-widget/issues/22): added possibility to open without animations
     + NEW FEATURE: see ticket for details
 
