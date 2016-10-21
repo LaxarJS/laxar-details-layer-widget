@@ -7,8 +7,9 @@ define( [
    'json!../widget.json',
    'laxar',
    'laxar-mocks',
-   'angular-mocks'
-], function( descriptor, ax, axMocks, ngMocks ) {
+   'angular-mocks',
+   'angular'
+], function( descriptor, ax, axMocks, ngMocks, ng ) {
    'use strict';
 
    describe( 'The ax-details-layer-widget', function() {
@@ -27,6 +28,7 @@ define( [
                action: 'afterClose'
             },
             animateFrom: { actionSelectorPath: 'data.selector' },
+            skipAnimations: { actionSelectorPath: 'data.skipAnimations' },
             navigation: {
                parameterName: 'thePlace',
                parameterValue: 'testContent'
@@ -188,6 +190,40 @@ define( [
                   }, jasmine.any( Object ) );
             } );
 
+         } );
+
+      } );
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      describe( 'when the open action with truthy skipAnimations is received', function() {
+
+         var ngElementPrototype;
+         beforeEach( function() {
+            ngElementPrototype = Object.getPrototypeOf( ng.element( widgetDom ) );
+            spyOn( ngElementPrototype, 'css' ).and.callThrough();
+
+            axMocks.eventBus.publish( 'takeActionRequest.open1', {
+               action: 'open1',
+               data: {
+                  selector: '#the-button',
+                  skipAnimations: true
+               }
+            } );
+            axMocks.eventBus.flush();
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         it( 'disables animations for the layer itself', function() {
+            expect( widgetDom.querySelector( '.ax-details-layer' ).classList )
+               .not.toContain( 'ax-details-layer-with-source-animation' );
+         } );
+
+         /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         it( 'disables transitions on the modal-backdrop', function() {
+            expect( ngElementPrototype.css ).toHaveBeenCalledWith( 'transition', 'none' );
          } );
 
       } );

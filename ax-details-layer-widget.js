@@ -77,6 +77,9 @@ define( [
          $scope.model.sourceElementSelector = $scope.features.animateFrom.actionSelectorPath ?
             ax.object.path( event, $scope.features.animateFrom.actionSelectorPath, null ) :
             null;
+         $scope.model.skipAnimations = $scope.features.skipAnimations.actionSelectorPath ?
+            ax.object.path( event, $scope.features.skipAnimations.actionSelectorPath, false ) :
+            false;
 
          publishPlaceParameter();
 
@@ -138,6 +141,7 @@ define( [
          scope: {
             isOpen: '=' + layerDirectiveName + 'IsOpen',
             sourceElementSelector: '=' + layerDirectiveName + 'SourceElementSelector',
+            skipAnimations: '=' + layerDirectiveName + 'SkipAnimations',
             useActiveElement: '=' + layerDirectiveName + 'UseActiveElement',
             onClose: '=' + layerDirectiveName + 'OnClose',
             whenVisibilityChanged: '=' + layerDirectiveName + 'WhenVisibilityChanged',
@@ -181,7 +185,7 @@ define( [
                if( open ) {
                   document.addEventListener( 'focus', checkFocus, true );
                   $document.on( 'keydown', tabCaptureListener );
-                  openLayer( sourceElement );
+                  openLayer( sourceElement, scope.skipAnimations );
                }
                else {
                   document.removeEventListener( 'focus', checkFocus );
@@ -281,9 +285,9 @@ define( [
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
-            function openLayer( sourceElement ) {
-               var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
-               if( sourceElement ) {
+            function openLayer( sourceElement, skipAnimations ) {
+               if( sourceElement && !skipAnimations ) {
+                  var boundingBox = sourceElement.getBoundingClientRect();
                   var scaling = boundingBox.width / viewportWidth();
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
                   element.css( 'transform',
@@ -305,14 +309,14 @@ define( [
                   content.scrollTop = 0;
                }
 
-               if( sourceElement ) {
+               if( sourceElement && !skipAnimations ) {
                   element.css( 'height', '' );
                   element.css( 'opacity', 1 );
                   element.css( 'transform', 'translate3d(0, 0, 0) scale3d( 1, 1, 1)' );
                   element.one( 'transitionend', completeOpening );
                }
                else {
-                  completeOpening();
+                  completeOpening( skipAnimations );
                }
                // Issue (#8):
                // For iOS Safari: we need to make the body fixed in order to prevent background scrolling.
@@ -324,13 +328,21 @@ define( [
 
                ///////////////////////////////////////////////////////////////////////////////////////////////
 
-               function completeOpening() {
+               function completeOpening( skipAnimations ) {
                   ng.element( document.body )
                      .on( 'keyup', escapeCloseHandler )
                      .addClass( 'modal-open' );
+                  if( skipAnimations ) {
+                     backdropElement.css( 'transition', 'none' );
+                     /*jshint -W030:false */
+                     backdropElement[ 0 ].offsetWidth; // Triggering reflow for the disabled transition
+                  }
                   backdropElement.addClass( 'ax-details-layer-open' );
                   element.removeClass( 'ax-details-layer-with-source-animation' );
                   scope.whenVisibilityChanged( true );
+                  if( skipAnimations ) {
+                     backdropElement.css( 'transition', '' );
+                  }
                }
             }
 
@@ -340,7 +352,6 @@ define( [
                if( isWebKit() ) {
                   restoreBodyScrolling();
                }
-               var boundingBox = sourceElement && sourceElement.getBoundingClientRect();
                backdropElement.removeClass( 'ax-details-layer-open' );
                ng.element( document.body )
                   .off( 'keyup', escapeCloseHandler )
@@ -348,6 +359,7 @@ define( [
                if( sourceElement ) {
                   element.addClass( 'ax-details-layer-with-source-animation' );
 
+                  var boundingBox = sourceElement.getBoundingClientRect();
                   var scaling = boundingBox.width / viewportWidth();
                   element.css( 'height', ( boundingBox.height / scaling ) + 'px' );
                   element.css( 'opacity', 0 );

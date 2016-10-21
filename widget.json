@@ -105,8 +105,18 @@
                },
                "actionSelectorPath": {
                   "type": "string",
-                  "default": null,
                   "description": "JSON path to the action event property to interpret as css selector to animate from."
+               }
+            }
+         },
+
+         "skipAnimations": {
+            "type": "object",
+            "description": "Configuration for skipping the opening animations.",
+            "properties": {
+               "actionSelectorPath": {
+                  "type": "string",
+                  "description": "JSON path to the action event property holding a boolean value whether animations should be skipped."
                }
             }
          },

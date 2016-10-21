@@ -55,6 +55,14 @@ If this is configured, it will always have precedence over the activeElement if 
 In case *animateFrom.activeElement* is configured to be `false` and the element is not found, a warning will be logged.
 
 
+### *skipAnimations.actionSelectorPath*
+
+A JSON path to the property within the action event object, that can be used to skip animations when opening the details layer widget.
+If this is configured and the according property within the event is `true`, no opening animations will take place.
+It is still possible to provide an element to animate from.
+This will then be used as animation target when closing the layer again.
+
+
 ### *logTag.name*
 
 Name of a log tag to set when the popup layer is opened.
