@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#23](https://github.com/LaxarJS/ax-details-layer-widget/issues/23): fixed css classes not being changed
+
 
 ## v1.4.0
 

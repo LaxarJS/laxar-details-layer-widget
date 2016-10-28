@@ -224,6 +224,7 @@ define( [
 
          it( 'disables transitions on the modal-backdrop', function() {
             expect( ngElementPrototype.css ).toHaveBeenCalledWith( 'transition', 'none' );
+            expect( widgetDom.querySelector( '.modal-backdrop' ).classList ).not.toContain( 'fade' );
          } );
 
       } );

@@ -167,6 +167,8 @@ define( [
                   return;
                }
 
+               backdropElement.toggleClass( 'fade', !( scope.skipAnimations && open ) );
+
                if( open && scope.useActiveElement ) {
                   sourceElement = document.activeElement;
                }
@@ -298,6 +300,7 @@ define( [
                   element.addClass( 'ax-details-layer-with-source-animation' );
                }
 
+               backdropElement.removeClass( 'ng-hide' );
                element.css( 'display', 'block' );
 
                /*jshint -W030:false */
@@ -377,7 +380,13 @@ define( [
 
                function completeClosing() {
                   element.removeClass( 'ax-details-layer-with-source-animation' );
-                  element.css( 'display', 'none' );
+                  element.css( {
+                     'display': 'none',
+                     'transform': '',
+                     'opacity': '',
+                     'height': ''
+                  } );
+                  backdropElement.addClass( 'ng-hide' );
                   scope.whenVisibilityChanged( false );
                   scope.$emit( layerDirectiveClosedEvent );
                }
