@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#24](https://github.com/LaxarJS/ax-details-layer-widget/issues/24): fixed opening and closing in quick succession
+
 
 ## v1.4.1
 

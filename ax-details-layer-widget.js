@@ -332,6 +332,11 @@ define( [
                ///////////////////////////////////////////////////////////////////////////////////////////////
 
                function completeOpening( skipAnimations ) {
+                  if( !scope.isOpen ) {
+                     // the layer was opened and instantly closed again
+                     return;
+                  }
+
                   ng.element( document.body )
                      .on( 'keyup', escapeCloseHandler )
                      .addClass( 'modal-open' );
@@ -379,6 +384,11 @@ define( [
                ///////////////////////////////////////////////////////////////////////////////////////////////
 
                function completeClosing() {
+                  if( scope.isOpen ) {
+                     // the layer was closed and instantly opened again
+                     return;
+                  }
+
                   element.removeClass( 'ax-details-layer-with-source-animation' );
                   element.css( {
                      'display': 'none',
