@@ -1,10 +1,53 @@
 # laxar-details-layer-widget [![Build Status](https://travis-ci.org/LaxarJS/ax-details-layer-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/ax-details-layer-widget)
 
-> Displays a simple details layer, growing from a source element with animation.
+> simple details layer, growing from a source element with animation as a LaxarJS widget for AngularJS v1
 
 Purpose of this widget is to provide a very simple layer to display details to some piece of information.
 In order to clarify the link between the information and the details, the layer will be zoomed in, starting from the source element until it covers the full viewport.
 If no source element is given, it is directly displayed in full size.
+
+
+## Usage
+
+### Installation
+
+In a LaxarJS v2 project with AngularJS v1 adapter, simply run:
+
+```console
+npm install laxar-details-layer-widget
+```
+
+### Configuration Example
+
+Here is an example configuration to use within your page definition:
+
+```json
+{
+   "widget": "laxar-details-layer-widget",
+   "id": "myPopup",
+   "features": {
+      "area": {
+         "name": "popupContents"
+      },
+      "open": {
+         "onActions": [ "openSesame" ]
+      },
+      "close": {
+         "onActions": [ "done", "closeIt" ]
+      },
+      "navigation": {
+         "parameterName": "popup-visible",
+         "parameterValue": true
+      }
+   }
+}
+
+This will configure a details layer instance providing a new widget area *myPopup.popupContents*.
+The popup will open itself as soon as another widget publishes a *takeActionRequest* event for the action topic *openSesame*.
+It will close again, when a takeActionRequest is published for either *done* or *closeIt*.
+
+The popup will also observe and manage the place parameter *popup-visible* so that the state of the UI is reflected in the URL and vice versa.
+
 
 ## Configuration
 
@@ -58,7 +101,7 @@ In case *animateFrom.activeElement* is configured to be `false` and the element 
 ### *skipAnimations.actionSelectorPath*
 
 A JSON path to the property within the action event object, that can be used to skip animations when opening the details layer widget.
-If this is configured and the according property within the event is `true`, no opening animations will take place.
+If this is configured and the corresponding property within the event is `true`, no opening animations will take place.
 It is still possible to provide an element to animate from.
 This will then be used as animation target when closing the layer again.
 
