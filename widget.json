@@ -1,5 +1,5 @@
 {
-   "name": "ax-details-layer-widget",
+   "name": "laxar-details-layer-widget",
    "description": "Displays a simple details layer, growing from a source element with animation to its full size.",
 
    "integration": {
@@ -7,7 +7,7 @@
       "type": "widget"
    },
 
-   "styleSource": "scss/ax-details-layer-widget.scss",
+   "styleSource": "scss/laxar-details-layer-widget.scss",
 
    "features": {
       "$schema": "http://json-schema.org/draft-04/schema#",

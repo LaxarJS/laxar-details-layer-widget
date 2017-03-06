@@ -488,7 +488,7 @@ const layerDirective = [ '$window', '$document', 'axWidgetServices', ( $window, 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const name = ng.module( 'axDetailsLayerWidget', [] )
-   .controller( 'AxDetailsLayerWidgetController', Controller )
+export const name = ng.module( 'laxarDetailsLayerWidget', [] )
+   .controller( 'LaxarDetailsLayerWidgetController', Controller )
    .directive( layerDirectiveName, layerDirective )
    .name;

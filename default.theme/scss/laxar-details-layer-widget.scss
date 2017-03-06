@@ -1,29 +1,28 @@
 /**
- * Copyright 2015 aixigo AG
+ * Copyright 2015-2017 aixigo AG
  * Released under the MIT license
  * www.laxarjs.org
  */
 @charset "UTF-8";
 
-$transitionDuration: 500ms;
-// $transitionDuration: 500ms;
-
-.ax-details-layer-widget {
+.laxar-details-layer-widget {
 
    .ax-details-layer {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 2vh;
+      left: 2vh;
+      height: 96vh;
+      width: calc( 100vw - 4vh );
 
+      // get in front of bootstrap modal-backdrop
+      z-index: 61;
       opacity: 1;
       background-color: white;
 
       transform-origin: top left;
 
       &.ax-details-layer-with-source-animation {
-         transition: all $transitionDuration ease-in-out;
+         transition: all 500ms ease-in-out;
          transition-property: top, left, height, transform, opacity;
       }
    }
@@ -37,12 +36,13 @@ $transitionDuration: 500ms;
 
    .ax-details-layer-content {
       position: relative;
-      top: 80px;
       z-index: 1002;
       overflow-x: hidden;
       overflow-y: auto;
-      height: calc(100% - 80px);
-      width: 100%;
+      top: 80px;
+      left: 80px;
+      height: calc( 100% - 160px );
+      width: calc( 100% - 160px );
    }
 
 }

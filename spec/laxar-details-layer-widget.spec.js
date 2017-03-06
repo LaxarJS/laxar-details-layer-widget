@@ -10,7 +10,7 @@ import 'angular-mocks';
 const anyFunc = jasmine.any( Function );
 const transitionDurationMs = 1;
 
-describe( 'The ax-details-layer-widget', () => {
+describe( 'The laxar-details-layer-widget', () => {
 
    beforeEach( axMocks.setupForWidget() );
 
