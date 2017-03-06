@@ -5,6 +5,9 @@
  */
 @charset "UTF-8";
 
+$transitionDuration: 500ms;
+// $transitionDuration: 500ms;
+
 .ax-details-layer-widget {
 
    .ax-details-layer {
@@ -20,7 +23,7 @@
       transform-origin: top left;
 
       &.ax-details-layer-with-source-animation {
-         transition: all 500ms ease-in-out;
+         transition: all $transitionDuration ease-in-out;
          transition-property: top, left, height, transform, opacity;
       }
    }
