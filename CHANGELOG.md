@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#27](https://github.com/LaxarJS/ax-details-layer-widget/issues/27): fixed using jQuery instead of jqLite
+
 
 ## v1.4.2
 

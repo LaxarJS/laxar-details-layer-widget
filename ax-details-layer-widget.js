@@ -150,7 +150,7 @@ define( [
          link: function( scope, element ) {
 
             element.css( 'display', 'none' );
-            var backdropElement = element.parent().find( '.modal-backdrop' );
+            var backdropElement = $querySelector( '.modal-backdrop', element.parent() );
 
             var escapeCloseHandler = function( event ) {
                if( event.keyCode === 27 && typeof scope.onClose === 'function' ) {
@@ -158,7 +158,6 @@ define( [
                }
             };
 
-            var previousPageYOffset;
             var lastTabWasShifted = false;
 
             var sourceElement = null;
@@ -221,7 +220,7 @@ define( [
 
             function findFirstOrLast( useLargest ) {
                var nodes = [];
-               element.find( 'input,a,button,textarea,select,[tabindex]' ).each( function( index ) {
+               element.find( 'input,a,button,textarea,select,[tabindex]' ).each( function() {
                   nodes.push( this );
                } );
 
@@ -308,7 +307,7 @@ define( [
 
                // scroll content layer to top:
                if( scope.resetOnOpen ) {
-                  var content = ng.element( '.ax-details-layer-content', element )[ 0 ];
+                  var content = element[ 0 ].querySelector( '.ax-details-layer-content' );
                   content.scrollTop = 0;
                }
 
@@ -407,7 +406,8 @@ define( [
             function preventBodyScrolling() {
                // Following body scroll prevention taken from here:
                // https://github.com/luster-io/prevent-overscroll
-               ng.element( '.ax-details-layer-content', element )
+
+               $querySelector( '.ax-details-layer-content' )
                   .on( 'touchstart', handleContentTouchStart )
                   .on( 'touchmove', handleContentTouchMove );
 
@@ -417,7 +417,7 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function restoreBodyScrolling() {
-               ng.element( '.ax-details-layer-content', element )
+               $querySelector( '.ax-details-layer-content' )
                   .off( 'touchstart', handleContentTouchStart )
                   .off( 'touchmove', handleContentTouchMove );
 
@@ -474,6 +474,13 @@ define( [
 
             function isWebKit() {
                return navigator.userAgent.match( /AppleWebKit/ );
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function $querySelector( selector, $context ) {
+               $context = typeof $context === 'undefined' ? element : $context;
+               return ng.element( $context[ 0 ].querySelector( selector ) );
             }
          }
       };

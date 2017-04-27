@@ -15,7 +15,7 @@ define( [
    describe( 'The ax-details-layer-widget', function() {
 
       beforeEach( axMocks.createSetupForWidget( descriptor, {
-         knownMissingResources: []
+         knownMissingResources: [ 'laxar-details-layer-widget.html', 'laxar-details-layer-widget.css' ]
       } ) );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
