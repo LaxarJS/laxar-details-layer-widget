@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#28](https://github.com/LaxarJS/ax-details-layer-widget/issues/28): removing event listener when layer is destroyed and fixed using jQuery instead of jqLite
+
 
 ## v1.4.3
 

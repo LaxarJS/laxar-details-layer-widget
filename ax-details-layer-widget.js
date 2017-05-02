@@ -219,10 +219,9 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function findFirstOrLast( useLargest ) {
-               var nodes = [];
-               element.find( 'input,a,button,textarea,select,[tabindex]' ).each( function() {
-                  nodes.push( this );
-               } );
+               var nodes = [].slice.call(
+                  element[ 0 ].querySelectorAll( 'input,a,button,textarea,select,[tabindex]' )
+               );
 
                return nodes.reduce( function( previousNode, currentNode ) {
 
@@ -281,6 +280,7 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             scope.$on( '$destroy', function() {
+               document.removeEventListener( 'focus', checkFocus );
                sourceElement = null;
             } );
 
@@ -427,7 +427,7 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function handleContentTouchStart() {
-               var contentElement = ng.element( '.ax-details-layer-content', element )[0];
+               var contentElement = element[ 0 ].querySelector( '.ax-details-layer-content' );
                var top = contentElement.scrollTop;
                var totalScroll = contentElement.scrollHeight;
                var currentScroll = top + contentElement.offsetHeight;
@@ -445,7 +445,7 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function handleContentTouchMove( event ) {
-               var contentElement = ng.element( '.ax-details-layer-content', element )[0];
+               var contentElement = element[ 0 ].querySelector( '.ax-details-layer-content' );
                // If the content is actually scrollable, i.e. the content is long enough
                // that scrolling can occur
                if( contentElement.offsetHeight < contentElement.scrollHeight ) {
@@ -456,7 +456,6 @@ define( [
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             function handleBodyTouchMove( event ) {
-               // console.log( event.target, event.originalEvent._isDetailsLayer );
                // In this case, the default behavior is scrolling the body, which
                // would result in an overflow. Since we don't want that, we preventDefault.
                if( !event.originalEvent._isDetailsLayer ) {
