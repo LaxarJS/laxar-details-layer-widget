@@ -41,6 +41,7 @@ Here is an example configuration to use within your page definition:
       }
    }
 }
+```
 
 This will configure a details layer instance providing a new widget area *myPopup.popupContents*.
 The popup will open itself as soon as another widget publishes a *takeActionRequest* event for the action topic *openSesame*.

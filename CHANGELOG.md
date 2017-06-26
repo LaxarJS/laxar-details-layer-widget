@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#26](https://github.com/LaxarJS/ax-details-layer-widget/issues/26): documentation: fixed Markdown syntax
+
 
 ## v2.0.0-alpha.0
 
