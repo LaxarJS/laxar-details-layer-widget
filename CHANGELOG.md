@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v2.0.0-rc.0
+
 - [#29](https://github.com/LaxarJS/laxar-details-layer-widget/issues/29): renamed repository to match artifact name
 - [#26](https://github.com/LaxarJS/laxar-details-layer-widget/issues/26): documentation: fixed Markdown syntax
 
