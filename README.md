@@ -1,4 +1,4 @@
-# laxar-details-layer-widget [![Build Status](https://travis-ci.org/LaxarJS/ax-details-layer-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/ax-details-layer-widget)
+# laxar-details-layer-widget [![Build Status](https://travis-ci.org/LaxarJS/laxar-details-layer-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/laxar-details-layer-widget)
 
 > simple details layer, growing from a source element with animation as a LaxarJS widget for AngularJS v1
 

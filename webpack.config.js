@@ -1,28 +1,38 @@
 /**
- * Copyright 2015-2017 aixigo AG
+ * Copyright 2017 aixigo AG
  * Released under the MIT license.
  * http://laxarjs.org/license
  */
 /* eslint-env node */
 
 const pkg = require( './package.json' );
+const path = require( 'path' );
 
 const webpack = require( 'laxar-infrastructure' ).webpack( {
    context: __dirname,
-   rules: [
-      {
-         test: /\.js$/,
-         exclude: 'node_modules',
-         loader: 'babel-loader'
-      },
-      {
-         test: /\.spec.js$/,
-         exclude: 'node_modules',
-         loader: 'laxar-mocks/spec-loader'
-      }
-   ]
+   module: {
+      rules: [
+         {
+            test: /\.js$/,
+            exclude: [
+               path.resolve( __dirname, 'node_modules' )
+            ],
+            loader: 'babel-loader'
+         },
+         {
+            test: /\.spec\.js$/,
+            exclude: [
+               path.resolve( __dirname, 'node_modules' )
+            ],
+            loader: 'laxar-mocks/spec-loader'
+         },
+         {
+            test: /.scss$/,
+            loader: 'style-loader!css-loader!sass-loader'
+         }
+      ]
+   }
 } );
-
 
 module.exports = [
    webpack.library(),

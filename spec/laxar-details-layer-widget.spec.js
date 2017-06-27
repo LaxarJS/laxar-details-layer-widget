@@ -8,7 +8,7 @@ import * as ng from 'angular';
 import 'angular-mocks';
 
 const anyFunc = jasmine.any( Function );
-const transitionDurationMs = 1;
+const transitionDurationMs = 10;
 
 describe( 'The laxar-details-layer-widget', () => {
 
@@ -17,6 +17,7 @@ describe( 'The laxar-details-layer-widget', () => {
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    beforeEach( () => {
+
       axMocks.widget.configure( {
          open: { onActions: [ 'open1', 'open2' ] },
          close: {
@@ -97,8 +98,10 @@ describe( 'The laxar-details-layer-widget', () => {
                   selector: '#the-button'
                }
             } );
-            axMocks.eventBus.flush();
+
             awaitTransition( widgetDom.querySelector( '.ax-details-layer' ) ).then( done );
+            axMocks.eventBus.flush();
+            axMocks.widget.$scope.$digest();
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +124,7 @@ describe( 'The laxar-details-layer-widget', () => {
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-         it( 'adds a bootstrap css class on the body element', () => {
+         it( 'adds a bootstrap CSS class on the body element', () => {
             expect( [].slice.call( document.body.classList ) ).toContain( 'modal-open' );
          } );
 
@@ -142,8 +145,10 @@ describe( 'The laxar-details-layer-widget', () => {
 
             beforeEach( done => {
                axMocks.eventBus.publish( 'takeActionRequest.close2', { action: 'close2' } );
-               axMocks.eventBus.flush();
+
                awaitTransition( widgetDom.querySelector( '.ax-details-layer' ) ).then( done );
+               axMocks.eventBus.flush();
+               axMocks.widget.$scope.$digest();
             } );
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +159,7 @@ describe( 'The laxar-details-layer-widget', () => {
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
-            it( 'removes the bootstrap css class on the body element', () => {
+            it( 'removes the bootstrap CSS class on the body element', () => {
                expect( [].slice.call( document.body.classList ) ).not.toContain( 'modal-open' );
             } );
 
@@ -187,8 +192,10 @@ describe( 'The laxar-details-layer-widget', () => {
                   skipAnimations: true
                }
             } );
-            axMocks.eventBus.flush();
+
             window.setTimeout( done, 100 );
+            axMocks.eventBus.flush();
+            axMocks.widget.$scope.$digest();
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -370,7 +377,7 @@ describe( 'The laxar-details-layer-widget', () => {
       return new Promise( done => {
          element.addEventListener( 'transitionend', handle );
          function handle() {
-            element.addEventListener( 'transitionend', handle );
+            element.removeEventListener( 'transitionend', handle );
             done();
          }
       } );

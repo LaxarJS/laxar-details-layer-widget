@@ -224,6 +224,9 @@ const layerDirective = [ '$window', '$document', 'axWidgetServices', ( $window, 
             const nodes = [].slice.call(
                element[ 0 ].querySelectorAll( 'input,a,button,textarea,select,[tabindex]' )
             );
+            if( !nodes.length ) {
+               return null;
+            }
 
             return nodes.reduce( ( previousNode, currentNode ) => {
 
