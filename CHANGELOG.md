@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#32](https://github.com/LaxarJS/laxar-details-layer-widget/issues/32): fixed z-index values
+
 
 ## v2.0.0-rc.0
 
