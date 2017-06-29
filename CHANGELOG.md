@@ -3,6 +3,7 @@
 ## Last Changes
 
 
+## v2.0.0
 ## v2.0.0-rc.1
 
 - [#31](https://github.com/LaxarJS/laxar-details-layer-widget/issues/31): fixed package description
