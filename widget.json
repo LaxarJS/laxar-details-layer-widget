@@ -3,7 +3,7 @@
    "description": "Displays a simple details layer, growing from a source element with animation to its full size.",
 
    "integration": {
-      "technology": "angular",
+      "technology": "plain",
       "type": "widget"
    },
 
