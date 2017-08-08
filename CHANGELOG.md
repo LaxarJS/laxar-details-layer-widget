@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+## v3.0.0-beta.0
 
 - [#34](https://github.com/LaxarJS/laxar-details-layer-widget/issues/34): transformed into plain widget
     + **BREAKING CHANGE:** see ticket for details
