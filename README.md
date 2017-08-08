@@ -1,6 +1,6 @@
 # laxar-details-layer-widget [![Build Status](https://travis-ci.org/LaxarJS/laxar-details-layer-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/laxar-details-layer-widget)
 
-> simple details layer, growing from a source element with animation as a LaxarJS widget for AngularJS v1
+> simple details layer, growing from a source element with animation as a plain LaxarJS widget
 
 Purpose of this widget is to provide a very simple layer to display details to some piece of information.
 In order to clarify the link between the information and the details, the layer will be zoomed in, starting from the source element until it covers the full viewport.
@@ -11,7 +11,7 @@ If no source element is given, it is directly displayed in full size.
 
 ### Installation
 
-In a LaxarJS v2 project with AngularJS v1 adapter, simply run:
+In a LaxarJS v2 project simply run:
 
 ```console
 npm install laxar-details-layer-widget

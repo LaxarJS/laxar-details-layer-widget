@@ -4,8 +4,6 @@
  * http://laxarjs.org/license
  */
 import * as axMocks from 'laxar-mocks';
-import * as ng from 'angular';
-import 'angular-mocks';
 
 const anyFunc = jasmine.any( Function );
 const transitionDurationMs = 10;
@@ -39,7 +37,6 @@ describe( 'The laxar-details-layer-widget', () => {
 
    let widgetDom;
    let widgetEventBus;
-   let widgetScope;
    describe( 'when loaded', () => {
 
       beforeEach( axMocks.widget.load );
@@ -54,7 +51,6 @@ describe( 'The laxar-details-layer-widget', () => {
          document.body.appendChild( button );
 
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,12 +79,6 @@ describe( 'The laxar-details-layer-widget', () => {
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      it( 'is initially closed', () => {
-         expect( widgetScope.model.isOpen ).toBe( false );
-      } );
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
       describe( 'when the open action is received, and the animation is complete', () => {
 
          beforeEach( done => {
@@ -101,25 +91,12 @@ describe( 'The laxar-details-layer-widget', () => {
 
             awaitTransition( widgetDom.querySelector( '.ax-details-layer' ) ).then( done );
             axMocks.eventBus.flush();
-            axMocks.widget.$scope.$digest();
-         } );
-
-         /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-         it( 'sets the layer to open', () => {
-            expect( widgetScope.model.isOpen ).toBe( true );
-         } );
-
-         /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-         it( 'reads the source element selector from the event', () => {
-            expect( widgetScope.model.sourceElementSelector ).toEqual( '#the-button' );
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
          it( 'by default cannot be closed by a close icon', () => {
-            expect( widgetDom.querySelector( 'button' ) ).toEqual( null );
+            expect( widgetDom.querySelector( 'button' ).style.display ).toEqual( 'none' );
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,13 +125,6 @@ describe( 'The laxar-details-layer-widget', () => {
 
                awaitTransition( widgetDom.querySelector( '.ax-details-layer' ) ).then( done );
                axMocks.eventBus.flush();
-               axMocks.widget.$scope.$digest();
-            } );
-
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-
-            it( 'sets the layer to closed', () => {
-               expect( widgetScope.model.isOpen ).toBe( false );
             } );
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,11 +150,7 @@ describe( 'The laxar-details-layer-widget', () => {
 
       describe( 'when the open action with truthy skipAnimations is received', () => {
 
-         let ngElementPrototype;
          beforeEach( done => {
-            ngElementPrototype = Object.getPrototypeOf( ng.element( widgetDom ) );
-            spyOn( ngElementPrototype, 'css' ).and.callThrough();
-
             axMocks.eventBus.publish( 'takeActionRequest.open1', {
                action: 'open1',
                data: {
@@ -195,7 +161,6 @@ describe( 'The laxar-details-layer-widget', () => {
 
             window.setTimeout( done, 100 );
             axMocks.eventBus.flush();
-            axMocks.widget.$scope.$digest();
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +173,7 @@ describe( 'The laxar-details-layer-widget', () => {
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
          it( 'disables transitions on the modal-backdrop', () => {
-            expect( ngElementPrototype.css ).toHaveBeenCalledWith( 'transition', 'none' );
+            expect( widgetDom.querySelector( '.modal-backdrop' ).style.transition ).toEqual( '' );
             expect( widgetDom.querySelector( '.modal-backdrop' ).classList ).not.toContain( 'fade' );
          } );
 
@@ -217,6 +182,11 @@ describe( 'The laxar-details-layer-widget', () => {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       describe( 'when a didNavigate event is received', () => {
+
+         let detailsLayer;
+         beforeEach( () => {
+            detailsLayer = widgetDom.querySelector( '.ax-details-layer' );
+         } );
 
          describe( 'without the configured place parameter', () => {
 
@@ -228,7 +198,7 @@ describe( 'The laxar-details-layer-widget', () => {
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             it( 'does not open the layer', () => {
-               expect( widgetScope.model.isOpen ).toBe( false );
+               expect( detailsLayer.style.display ).toEqual( 'none' );
             } );
 
          } );
@@ -247,7 +217,7 @@ describe( 'The laxar-details-layer-widget', () => {
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             it( 'does not open the layer', () => {
-               expect( widgetScope.model.isOpen ).toBe( false );
+               expect( detailsLayer.style.display ).toEqual( 'none' );
             } );
 
          } );
@@ -266,7 +236,7 @@ describe( 'The laxar-details-layer-widget', () => {
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             it( 'opens the layer', () => {
-               expect( widgetScope.model.isOpen ).toBe( true );
+               expect( detailsLayer.style.display ).not.toEqual( 'none' );
             } );
 
          } );
@@ -287,7 +257,6 @@ describe( 'The laxar-details-layer-widget', () => {
       beforeEach( axMocks.widget.load );
       beforeEach( () => {
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
 
          axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
          axMocks.eventBus.flush();
@@ -296,9 +265,9 @@ describe( 'The laxar-details-layer-widget', () => {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       it( 'it is closed when activating the close icon', () => {
-         widgetScope.functions.close();
+         widgetDom.querySelector( '.ax-details-layer-close-button' ).click();
 
-         expect( widgetScope.model.isOpen ).toBe( false );
+         expect( document.body.classList ).not.toContain( 'modal-open' );
       } );
 
    } );
@@ -314,7 +283,6 @@ describe( 'The laxar-details-layer-widget', () => {
       beforeEach( axMocks.widget.load );
       beforeEach( () => {
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
 
          axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
          axMocks.eventBus.flush();
@@ -323,9 +291,9 @@ describe( 'The laxar-details-layer-widget', () => {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       it( 'it is closed when clicking the modal backdrop', () => {
-         widgetScope.functions.backdropClicked();
+         widgetDom.querySelector( '.modal-backdrop' ).click();
 
-         expect( widgetScope.model.isOpen ).toBe( false );
+         expect( document.body.classList ).not.toContain( 'modal-open' );
       } );
 
    } );
@@ -342,7 +310,6 @@ describe( 'The laxar-details-layer-widget', () => {
       beforeEach( axMocks.widget.load );
       beforeEach( () => {
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
 
          axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
          axMocks.eventBus.flush();
@@ -374,11 +341,12 @@ describe( 'The laxar-details-layer-widget', () => {
    } );
 
    function awaitTransition( element ) {
-      return new Promise( done => {
+      return new Promise( resolve => {
          element.addEventListener( 'transitionend', handle );
          function handle() {
             element.removeEventListener( 'transitionend', handle );
-            done();
+            // TODO: We should find a better way to make sure transitions have ended and tests can continue.
+            setTimeout( resolve, 100 );
          }
       } );
    }

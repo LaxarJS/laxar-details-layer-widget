@@ -1,15 +1,8 @@
-<div class="modal-backdrop fade in ng-hide"
-     ng-click="functions.backdropClicked()"></div>
+<div class="modal-backdrop fade in"
+     style="display: none;"></div>
 
 <div class="ax-details-layer"
-     ax-details-layer
-     ax-details-layer-is-open="model.isOpen"
-     ax-details-layer-on-close="functions.close"
-     ax-details-layer-source-element-selector="model.sourceElementSelector"
-     ax-details-layer-skip-animations="model.skipAnimations"
-     ax-details-layer-when-visibility-changed="functions.whenVisibilityChanged"
-     ax-details-layer-use-active-element=":: features.animateFrom.activeElement"
-     ax-details-layer-reset-on-open=":: features.open.resetPosition">
+     style="display: none;">
 
    <button type="button"
            ng-if="features.closeIcon.enabled"
@@ -17,8 +10,6 @@
            class="ax-details-layer-close-button btn btn-link fa fa-times"
          ></button>
 
-   <div class="ax-details-layer-content"
-        data-ax-widget-area
-        data-ax-widget-area-binding=":: features.area.name"></div>
+   <div class="ax-details-layer-content"></div>
 
 </div>
