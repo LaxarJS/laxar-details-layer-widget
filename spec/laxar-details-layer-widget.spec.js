@@ -37,7 +37,6 @@ describe( 'The laxar-details-layer-widget', () => {
 
    let widgetDom;
    let widgetEventBus;
-   let widgetScope;
    describe( 'when loaded', () => {
 
       beforeEach( axMocks.widget.load );
@@ -52,7 +51,6 @@ describe( 'The laxar-details-layer-widget', () => {
          document.body.appendChild( button );
 
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +135,7 @@ describe( 'The laxar-details-layer-widget', () => {
 
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
-            xit( 'publishes the close action', () => {
+            it( 'publishes the close action', () => {
                expect( widgetEventBus.publishAndGatherReplies )
                   .toHaveBeenCalledWith( 'takeActionRequest.afterClose', {
                      action: 'afterClose'
@@ -183,7 +181,12 @@ describe( 'The laxar-details-layer-widget', () => {
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      xdescribe( 'when a didNavigate event is received', () => {
+      describe( 'when a didNavigate event is received', () => {
+
+         let detailsLayer;
+         beforeEach( () => {
+            detailsLayer = widgetDom.querySelector( '.ax-details-layer' );
+         } );
 
          describe( 'without the configured place parameter', () => {
 
@@ -195,7 +198,7 @@ describe( 'The laxar-details-layer-widget', () => {
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             it( 'does not open the layer', () => {
-               expect( widgetScope.model.isOpen ).toBe( false );
+               expect( detailsLayer.style.display ).toEqual( 'none' );
             } );
 
          } );
@@ -214,7 +217,7 @@ describe( 'The laxar-details-layer-widget', () => {
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             it( 'does not open the layer', () => {
-               expect( widgetScope.model.isOpen ).toBe( false );
+               expect( detailsLayer.style.display ).toEqual( 'none' );
             } );
 
          } );
@@ -233,7 +236,7 @@ describe( 'The laxar-details-layer-widget', () => {
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
             it( 'opens the layer', () => {
-               expect( widgetScope.model.isOpen ).toBe( true );
+               expect( detailsLayer.style.display ).not.toEqual( 'none' );
             } );
 
          } );
@@ -245,7 +248,7 @@ describe( 'The laxar-details-layer-widget', () => {
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   xdescribe( 'if configured to be closeable by close icon and then opened', () => {
+   describe( 'if configured to be closeable by close icon and then opened', () => {
 
       beforeEach( () => {
          axMocks.widget.configure( 'closeIcon.enabled', true );
@@ -254,7 +257,6 @@ describe( 'The laxar-details-layer-widget', () => {
       beforeEach( axMocks.widget.load );
       beforeEach( () => {
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
 
          axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
          axMocks.eventBus.flush();
@@ -263,16 +265,16 @@ describe( 'The laxar-details-layer-widget', () => {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       it( 'it is closed when activating the close icon', () => {
-         widgetScope.functions.close();
+         widgetDom.querySelector( '.ax-details-layer-close-button' ).click();
 
-         expect( widgetScope.model.isOpen ).toBe( false );
+         expect( document.body.classList ).not.toContain( 'modal-open' );
       } );
 
    } );
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   xdescribe( 'if configured to be closeable by backdrop click and then opened', () => {
+   describe( 'if configured to be closeable by backdrop click and then opened', () => {
 
       beforeEach( () => {
          axMocks.widget.configure( 'backdropClose.enabled', true );
@@ -281,7 +283,6 @@ describe( 'The laxar-details-layer-widget', () => {
       beforeEach( axMocks.widget.load );
       beforeEach( () => {
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
 
          axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
          axMocks.eventBus.flush();
@@ -290,9 +291,9 @@ describe( 'The laxar-details-layer-widget', () => {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       it( 'it is closed when clicking the modal backdrop', () => {
-         widgetScope.functions.backdropClicked();
+         widgetDom.querySelector( '.modal-backdrop' ).click();
 
-         expect( widgetScope.model.isOpen ).toBe( false );
+         expect( document.body.classList ).not.toContain( 'modal-open' );
       } );
 
    } );
@@ -309,7 +310,6 @@ describe( 'The laxar-details-layer-widget', () => {
       beforeEach( axMocks.widget.load );
       beforeEach( () => {
          widgetEventBus = axMocks.widget.axEventBus;
-         widgetScope = axMocks.widget.$scope;
 
          axMocks.eventBus.publish( 'takeActionRequest.open1', { action: 'open1' } );
          axMocks.eventBus.flush();
@@ -345,7 +345,8 @@ describe( 'The laxar-details-layer-widget', () => {
          element.addEventListener( 'transitionend', handle );
          function handle() {
             element.removeEventListener( 'transitionend', handle );
-            resolve();
+            // TODO: We should find a better way to make sure transitions have ended and tests can continue.
+            setTimeout( resolve, 100 );
          }
       } );
    }

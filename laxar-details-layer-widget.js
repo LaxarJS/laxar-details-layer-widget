@@ -6,10 +6,6 @@
 import * as ax from 'laxar';
 import * as patterns from 'laxar-patterns';
 
-const layerDirectiveName = 'axDetailsLayer';
-const layerDirectiveClosedEvent = `${layerDirectiveName}.layerClosed`;
-
-
 export const injections = [ 'axAreaHelper', 'axContext', 'axEventBus', 'axLog', 'axVisibility', 'axWithDom' ];
 export function create( areaHelper, context, eventBus, log, visibility, withDom ) {
 
