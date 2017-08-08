@@ -47,7 +47,7 @@ export function create( areaHelper, context, eventBus, log, visibility, withDom 
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   function handleOpenAction() {
+   function handleOpenAction( event ) {
       if( isOpen ) {
          return;
       }
@@ -146,7 +146,7 @@ export function create( areaHelper, context, eventBus, log, visibility, withDom 
       let lastTabWasShifted = false;
       let sourceElement = null;
       applyVisibility = open => {
-         backdropElement.classList[ !( skipAnimations && open ) ? 'remove' : 'add' ]( 'fade' );
+         backdropElement.classList[ !( skipAnimations && open ) ? 'add' : 'remove' ]( 'fade' );
 
          if( open && features.animateFrom.activeElement ) {
             sourceElement = document.activeElement;
