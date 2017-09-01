@@ -133,8 +133,8 @@
                },
 
                "parameterValue": {
-                  "type": "string",
-                  "description": "Parameter value associated with opening this details layer instance."
+                  "type": [ "boolean", "string" ],
+                  "description": "Parameter value associated with opening this details layer instance"
                }
             }
          },
