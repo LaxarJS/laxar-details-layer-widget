@@ -36,8 +36,8 @@ Here is an example configuration to use within your page definition:
          "onActions": [ "done", "closeIt" ]
       },
       "navigation": {
-         "parameterName": "popup-visible",
-         "parameterValue": true
+         "parameterName": "active-layer",
+         "parameterValue": "my-popup"
       }
    }
 }
@@ -47,7 +47,8 @@ This will configure a details layer instance providing a new widget area *myPopu
 The popup will open itself as soon as another widget publishes a *takeActionRequest* event for the action topic *openSesame*.
 It will close again, when a takeActionRequest is published for either *done* or *closeIt*.
 
-The popup will also observe and manage the place parameter *popup-visible* so that the state of the UI is reflected in the URL and vice versa.
+The popup will also observe and manage the place parameter *active-layer* to open the layer when the parameter is set to `"my-popup"`.
+By using the navigation feature, the state of the UI is reflected in the URL and vice versa.
 
 
 ## Configuration
@@ -119,3 +120,17 @@ Note that the log tag is only set if `logTag.value` is also set.
 Value of a log tag to set when the popup layer is opened.
 As soon as the layer is closed again, the log tag is removed.
 Note that the log tag is only set if `logTag.name` is also set.
+
+
+### *navigation.parameterName*
+
+Place parameter to use for indicating the currently visible details.
+Usually, you would use the same parameter for multiple widget instances, as only one layer should be open at any given time.
+If this is not set, place parameters do not interact with the details layer visibility.
+
+
+### *navigation.parameterValue*
+
+Parameter value associated with opening this details layer instance.
+If set to a string, the layer is opened if the actual place parameter value matches the given string.
+If set to `true`, the layer is opened if the parameter is given flag-style, i.e. without a value.
