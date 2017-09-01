@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v2.0.1
+
 - [#33](https://github.com/LaxarJS/laxar-details-layer-widget/issues/33): documentation: fixed README example for `navigation.parameterValue`
 
 
