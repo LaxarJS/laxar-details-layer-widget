@@ -181,7 +181,7 @@ export function create( areaHelper, context, eventBus, log, visibility, withDom 
 
       function checkFocus( event ) {
          let node = event.target;
-         while( node !== document.body && node !== layerElement ) {
+         while( node !== null && node !== document.body && node !== layerElement ) {
             node = node.parentNode;
          }
          if( node === document.body ) {
