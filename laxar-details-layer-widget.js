@@ -335,6 +335,8 @@ export function create( areaHelper, context, eventBus, log, visibility, withDom 
             }
             backdropElement.classList.add( 'ax-details-layer-open' );
             layerElement.classList.remove( 'ax-details-layer-with-source-animation' );
+            // avoid blurred text, cf. #37
+            layerElement.style.transform = '';
             updateContentAreaVisibility( true );
             if( skipAnimations ) {
                backdropElement.style.transition = '';
