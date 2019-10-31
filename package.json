@@ -1,6 +1,6 @@
 {
   "name": "laxar-details-layer-widget",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Provides a very simple layer to display details to some piece of information",
   "homepage": "http://laxarjs.org",
   "main": "laxar-details-layer-widget.js",

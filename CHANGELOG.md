@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v3.0.1
+
 - [#37](https://github.com/LaxarJS/laxar-details-layer-widget/issues/37): remove CSS transform after animation, to improve text rendering quality. Remove some obsolete markup
 
 
